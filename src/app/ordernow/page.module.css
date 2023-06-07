@@ -64,15 +64,16 @@
 .gridContainer {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 5px;
+    column-gap: 5%;
 }
 
 .column1 {
-    flex-basis: 60%;
+    flex-basis: 75%;
 }
 
 .column2 {
-    flex-basis: 30%;
+    flex-basis: 20%;
+    padding: 2% 0 2% 2%;
 }
 
 .buttonContainer {
@@ -128,7 +129,71 @@
     font-weight: bold;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 737px) {
+    .column1 {
+        flex-basis: 73%;
+    }
 
-
+    .column2 {
+        flex-basis: 20%;
+        padding: 2% 0 2% 2%;
+    }
 }
+
+@media (max-width: 682px) {
+    .column1 {
+        flex-basis: 72%;
+    }
+
+    .column2 {
+        flex-basis: 20%;
+        padding: 2% 0 2% 2%;
+    }
+}
+
+@media (max-width: 644px) {
+    .column1 {
+        flex-basis: 60%;
+    }
+
+    .column2 {
+        flex-basis: 20%;
+        padding: 2% 0 2% 2%;
+    }
+}
+
+@media (max-width: 481px) {
+    .column1 {
+        flex-basis: 59%;
+    }
+
+    .column2 {
+        flex-basis: 20%;
+        padding: 2% 0 2% 2%;
+    }
+}
+
+@media (max-width: 481px) {
+    .column1 {
+        flex-basis: 50%;
+    }
+
+    .column2 {
+        flex-basis: 20%;
+        padding: 2% 0 2% 2%;
+    }
+}
+
+@media (max-width: 359px) {
+    .column1 {
+        flex-basis: 100%;
+
+    }
+
+    .column2 {
+        flex-basis: 100%;
+        text-align: right;
+    }
+}
+
+
