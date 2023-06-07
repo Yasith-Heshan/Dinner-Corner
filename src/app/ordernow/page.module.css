@@ -1,0 +1,134 @@
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.heading {
+    text-align: center;
+}
+
+.form {
+    margin-top: 20px;
+}
+
+.formGroup {
+    margin-bottom: 10px;
+}
+
+.label {
+    display: block;
+    font-weight: bold;
+}
+
+.input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.submitButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4c8bf5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.orderListHeading {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.orderList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.orderItem {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.mealType {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.gridContainer {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 5px;
+}
+
+.column1 {
+    flex-basis: 60%;
+}
+
+.column2 {
+    flex-basis: 30%;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.addButton {
+    background-color: green;
+    padding: 10px;
+    font-size: 25px;
+    border-radius: 10px;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table thead th {
+    background-color: #f5f5f5;
+}
+
+
+.table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+.removeButton {
+    background-color: red;
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 5px;
+    border: none;
+}
+
+.total {
+    background-color: #fc4d8f;
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+
+
+}

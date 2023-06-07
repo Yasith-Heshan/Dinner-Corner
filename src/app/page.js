@@ -1,95 +1,67 @@
-import Image from 'next/image'
 import styles from './page.module.css'
+import Link from "next/link";
+import {pricesList} from "@/utils/priceList";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    return (
+        <div className={styles.container}>
+            <h1>Dinner Corner වෙත සාදරයෙන් පිළිගනිමු</h1>
+            <div className={styles.gridcontainer}>
+                <div className={styles.column}>
+                    <img src="/dinner_plate.jpg" alt="Dinner Meal" className={styles.image}/>
+                </div>
+                <div className={styles.column}>
+                    <h2 className={styles.subtitle}>Dinner Corner යනු...</h2>
+                    <ul className={styles.list}>
+                        <li>අඩු මුදලට රසවත් ආහාර වේලක් හොයනවාද?.</li>
+                        <li>අධික ඉල්ලුම නිසා විශ්ව විද්‍යාල පරිශ්‍රය අවටින් ආහාර සපයා ගැනීමේ අපහසුතා පවතිනවාද?</li>
+                        <li>අඩු මුදලට රසවත් ආහාර වේලක් ලබා දෙන්නට අපි සූදානම්.</li>
+                        <li><span className={styles.specialNote}>දැනට මෙම සේවාව මොරටුව විශ්ව විද්‍යාලය අවට සිටින සිසුන්ට පමණක් ක්‍රියාත්මක වේ.</span>
+                        </li>
+                        <li>එළවළු, බිත්තර, මාළු සහ මස් ආහර වේල් ඔබගේ රුචිය මත ලබා දීමට අපි සුදානම්.</li>
+                        <li>ලබා දෙන මුදලට උපරිම සාධාරණයක් ඉටු කරමින් ප්‍රණීත ආහර වේලක් ලබා දීමෙ අරමුනින් අප දිනකට අඩු
+                            ඇනවුම් ප්‍රමාණයක් භාර ගනු ලැබේ.
+                        </li>
+                        <li>ඇනවුමක් භාර දීමට <span className={styles.thisLink}><Link
+                            href={'/ordernow'}>මෙතනින්</Link></span> ඇනවුම් ලබා දෙන පිටුවට පිවිසෙන්න.
+                        </li>
+                        <li>අප ආයතනය මගින් <span className={styles.specialNote}>රාත්‍රී ආහාර වේල් පමණක්</span> සපයන අතර
+                            පස්වරු 5ට පෙර ඇනවුම් කිරීමට කාරුණික වන්න.
+                        </li>
+                        <li>ඇනවුමක් භාරගත් පසු අප ආයතනය ඔබට ඇනවුම තහවුරු කිරීමට දුරකතන ඇමතුමක් ලබා දෙනු ඇත.</li>
+                        <li>භාර ගන්නා ලද් සියලුම ඇමටතුම් රාත්‍රී 7 ත් 8ත් අතර කාලයේ දී විශ්ව විද්‍යාලීය ප්‍රධාන ගේට්ටුව
+                            අසලටම රැගෙන එන අතර මේ සඳහා <span className={styles.specialNote}>කිසිඳු ප්‍රවාහන වියදමක් අය නොකෙරේ.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h2 className={styles.subtitle}>මිල දර්ශණය</h2>
+            <table className={styles.table}>
+                <thead>
+                <tr>
+                    <th>ආහාර වර්ගය</th>
+                    <th>ප්‍රමාණය</th>
+                    <th>කී දෙනෙකුට ප්‍රමාණවත් ද?</th>
+                    <th>ඒකකයක මිල</th>
+                </tr>
+                </thead>
+                <tbody>
+                {pricesList.map(
+                    (meal) => (
+                        <tr key={meal.id}>
+                            <td>{meal.type}</td>
+                            <td>{meal.size}</td>
+                            <td>{meal.enoughFor}</td>
+                            <td>{meal.price}</td>
+                        </tr>
+                    )
+                )
+
+                }
+
+
+                </tbody>
+            </table>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    );
 }
