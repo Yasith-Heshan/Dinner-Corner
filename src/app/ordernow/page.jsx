@@ -106,6 +106,7 @@ const OrderNow = () => {
                                                         setMealList([...temp]);
                                                     }
                                                 }
+
                                                 >ඉවත් කරන්න</button>
                                             </td>
                                         </tr>
