@@ -56,7 +56,7 @@ const OrderNow = () => {
                                 ))}
                             </select>
                             <label className={styles.label} htmlFor="qty">ප්‍ර්‍රමාණය:</label>
-                            <select className={styles.input} id="quantity" value={quantity}>
+                            <select onChange={(e)=>{setQuantity(e.target.value)}} className={styles.input} id="quantity" value={quantity}>
                                 {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(
                                     (e)=>(
                                         <option value={e} key={e}>{e}</option>
