@@ -33,14 +33,14 @@ const OrderNow = () => {
             setMealList([]);
             setTimeout(() => {
                 setDisplaySuccess(false)
-            }, 5000);
+            }, 3000);
 
         } catch (error) {
             setDisplayError(true);
             setDisableOrder(false);
             setTimeout(() => {
                 setDisplayError(false)
-            }, 5000);
+            }, 3000);
             console.error(error);
         }
     };
@@ -95,7 +95,6 @@ const OrderNow = () => {
                                 value={mealId}
                                 onChange={(e) => {
                                     setMealId(e.target.value);
-                                    console.log(e.target.value);
                                 }}
                                 className={styles.input}
                             >
