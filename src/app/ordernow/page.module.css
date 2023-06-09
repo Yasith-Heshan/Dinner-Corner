@@ -4,6 +4,16 @@
     padding: 40px;
 }
 
+.messageContainer{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 50px;
+    font-weight: bold;
+    color: red;
+    font-size: 25px;
+}
+
 .heading {
     text-align: center;
 }

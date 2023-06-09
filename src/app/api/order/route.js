@@ -14,7 +14,7 @@ export const GET = async (request)=>{
         const orders = await Order.find({
             createdAt: { $gte: today, $lt: tomorrow }
         });
-        return await new NextResponse(orders, {status:200});
+        return await new NextResponse(orders.length, {status:200});
         // return new NextResponse('orders', {status:200});
     }catch (error){
         return new NextResponse("Database Error",{status: 500})

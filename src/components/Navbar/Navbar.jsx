@@ -11,8 +11,8 @@ const pages = [
     },
     {
         id: 2,
-        title: 'භාර ගත් ඇනවුම්',
-        url: '/acceptedorders',},
+        title: 'භාර දී ඇනවුම්',
+        url: '/orders',},
 
 ]
 

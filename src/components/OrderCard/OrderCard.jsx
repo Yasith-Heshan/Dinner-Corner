@@ -2,7 +2,7 @@
 import styles from './OrderCard.module.css';
 import {pricesList} from "@/utils/priceList";
 import {useState} from "react";
-const OrderCard = ({order})=>{
+const OrderCard = ({order,id})=>{
     const getTotal=(itemList)=>{
         let total = 0;
         itemList.split(',').map(
@@ -16,7 +16,7 @@ const OrderCard = ({order})=>{
 
     return(
         <div className={styles.orderCard}>
-            <h3 className={styles.orderName}>{order.name}</h3>
+            <h3 className={styles.orderName}>{id+1}){order.name}</h3>
             <p className={styles.orderPhone}>{order.phoneNumber}</p>
             <ul className={styles.orderItems}>
                 {order.orderItems.split(",").map(
