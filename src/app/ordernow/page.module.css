@@ -196,4 +196,45 @@
     }
 }
 
+.successMsg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.successIcon {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.successMsg p {
+    margin: 0;
+}
+
+.errorMsg {
+    display: flex;
+    align-items: center;
+    background-color: #ffcccc;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.errorIcon {
+    font-size: 24px;
+    color: #ff0000;
+    margin-right: 10px;
+}
+
+.errorMsg p {
+    margin: 0;
+    color: #ff0000;
+    font-weight: bold;
+}
 
