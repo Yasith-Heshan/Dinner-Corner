@@ -19,7 +19,6 @@ const OrderNow = () => {
 
         const orderItemsArray = mealList.map((meal) => `${meal.id}`);
         const orderItems = orderItemsArray.join(',')
-        console.log(process.env.BASE_URL);
         try {
             const response = await axios.post(`/api/order`, {
                 name, phoneNumber, orderItems
@@ -32,8 +31,6 @@ const OrderNow = () => {
             setMealList([]);
             setTimeout(()=>{setDisplaySuccess(false)},5000);
 
-
-            console.log(response.data);
         } catch (error) {
             setDisplayError(true);
             setTimeout(()=>{setDisplayError(false)},5000);
