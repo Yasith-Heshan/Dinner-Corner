@@ -15,7 +15,7 @@ const OrderNow = () => {
     const [displayError, setDisplayError] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [visible, setVisible] = useState(true);
-    const maximumOrderLimit = 27;
+    const maximumOrderLimit = 50;
 
     const fetcher = (...args) => fetch(...args).then(res => res.json())
     const {data, error, isLoading} = useSWR('/api/order', fetcher);
