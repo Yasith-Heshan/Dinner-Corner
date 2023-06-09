@@ -5,8 +5,17 @@ import Order from "@/models/order";
 export const GET = async (request)=>{
     try{
         await connect();
-        const orders = await Order.find();
-        return new NextResponse(orders, {status:200});
+        console.log('called');
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0); // Set to the start of the day
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const orders = await Order.find({
+            createdAt: { $gte: today, $lt: tomorrow }
+        });
+        return await new NextResponse(orders, {status:200});
+        // return new NextResponse('orders', {status:200});
     }catch (error){
         return new NextResponse("Database Error",{status: 500})
     }
