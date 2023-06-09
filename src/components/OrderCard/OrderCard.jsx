@@ -14,10 +14,13 @@ const OrderCard = ({order,id})=>{
         return total;
     }
 
+    console.log(order);
+
     return(
         <div className={styles.orderCard}>
             <h3 className={styles.orderName}>{id+1}){order.name}</h3>
             <p className={styles.orderPhone}>{order.phoneNumber}</p>
+            <p className={styles.orderDate}>{(new Date(order.createdAt)).toString()}</p>
             <ul className={styles.orderItems}>
                 {order.orderItems.split(",").map(
                     (id,index) => {
