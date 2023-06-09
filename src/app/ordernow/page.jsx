@@ -12,7 +12,7 @@ const OrderNow = () => {
     const [mealList, setMealList] = useState([]);
     const [displaySuccess, setDisplaySuccess] = useState(false);
     const [displayError, setDisplayError] = useState(false);
-    const [disableOrder,setDisableOrder] = useState(false);
+    const [disableOrder, setDisableOrder] = useState(false);
 
 
     const handleSubmit = async (e) => {
@@ -31,12 +31,16 @@ const OrderNow = () => {
             setQuantity(1);
             setMealId(0);
             setMealList([]);
-            setTimeout(()=>{setDisplaySuccess(false)},5000);
+            setTimeout(() => {
+                setDisplaySuccess(false)
+            }, 5000);
 
         } catch (error) {
             setDisplayError(true);
             setDisableOrder(false);
-            setTimeout(()=>{setDisplayError(false)},5000);
+            setTimeout(() => {
+                setDisplayError(false)
+            }, 5000);
             console.error(error);
         }
     };
@@ -58,6 +62,13 @@ const OrderNow = () => {
                     <div className={styles.errorMsg}>
                         <span className={styles.errorIcon}>&#10007;</span>
                         <p>Error! Something went wrong.</p>
+                    </div>
+                )
+            }
+            {
+                disableOrder && (
+                    <div className={styles.requested}>
+                        <p>order requesting...</p>
                     </div>
                 )
             }
@@ -167,7 +178,9 @@ const OrderNow = () => {
                 </div>
 
                 <br/>
-                <button disabled={disableOrder} onClick={handleSubmit} type="button" className={styles.submitButton}>ඇනවුම් කරන්න</button>
+                <button disabled={disableOrder} onClick={handleSubmit} type="button"
+                        className={styles.submitButton}>ඇනවුම් කරන්න
+                </button>
             </form>
         </div>
     );

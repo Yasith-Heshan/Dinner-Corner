@@ -238,3 +238,18 @@
     font-weight: bold;
 }
 
+.requested{
+    display: flex;
+    align-items: center;
+    background-color: #f6ca26;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.requested p{
+    margin: 0;
+    color: #ff0000;
+    font-weight: bold;
+}
+
