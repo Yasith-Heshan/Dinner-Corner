@@ -12,14 +12,14 @@ const OrderNow = () => {
     const [mealList, setMealList] = useState([]);
     const [displaySuccess, setDisplaySuccess] = useState(false);
     const [displayError, setDisplayError] = useState(false);
+    const [disableOrder,setDisableOrder] = useState(false);
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setDisableOrder(true);
         const orderItemsArray = mealList.map((meal) => `${meal.id}`);
         const orderItems = orderItemsArray.join(',')
-        console.log(process.env.BASE_URL);
         try {
             const response = await axios.post(`/api/order`, {
                 name, phoneNumber, orderItems
@@ -32,8 +32,6 @@ const OrderNow = () => {
             setMealList([]);
             setTimeout(()=>{setDisplaySuccess(false)},5000);
 
-
-            console.log(response.data);
         } catch (error) {
             setDisplayError(true);
             setTimeout(()=>{setDisplayError(false)},5000);
@@ -167,7 +165,7 @@ const OrderNow = () => {
                 </div>
 
                 <br/>
-                <button type="submit" className={styles.submitButton}>ඇනවුම් කරන්න</button>
+                <button disabled={disableOrder} type="submit" className={styles.submitButton}>ඇනවුම් කරන්න</button>
             </form>
         </div>
     );
