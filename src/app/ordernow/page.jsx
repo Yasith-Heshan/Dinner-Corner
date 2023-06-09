@@ -16,8 +16,8 @@ const OrderNow = () => {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
         setDisableOrder(true);
+        e.preventDefault();
         const orderItemsArray = mealList.map((meal) => `${meal.id}`);
         const orderItems = orderItemsArray.join(',')
         try {
@@ -25,6 +25,7 @@ const OrderNow = () => {
                 name, phoneNumber, orderItems
             });
             setDisplaySuccess(true);
+            setDisableOrder(false);
             setName('');
             setPhoneNumber('');
             setQuantity(1);
@@ -34,6 +35,7 @@ const OrderNow = () => {
 
         } catch (error) {
             setDisplayError(true);
+            setDisableOrder(false);
             setTimeout(()=>{setDisplayError(false)},5000);
             console.error(error);
         }
