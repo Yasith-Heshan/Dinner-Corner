@@ -167,7 +167,7 @@ const OrderNow = () => {
                 </div>
 
                 <br/>
-                <button disabled={disableOrder} type="submit" className={styles.submitButton}>ඇනවුම් කරන්න</button>
+                <button disabled={disableOrder} onClick={handleSubmit} type="button" className={styles.submitButton}>ඇනවුම් කරන්න</button>
             </form>
         </div>
     );
