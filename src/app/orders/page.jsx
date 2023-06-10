@@ -13,9 +13,7 @@ const getData = async ()=>{
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
     console.log(today, tomorrow);
-    const orders = await Order.find({
-        createdAt: { $gte: today, $lt: tomorrow }
-    });
+    const orders = await Order.find();
     return orders;
 }
 
