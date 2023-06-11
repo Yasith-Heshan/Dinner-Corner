@@ -7,14 +7,17 @@ export const GET = async (request)=>{
         await connect();
         console.log('called');
         const today = new Date();
-        today.setUTCHours(0, 0, 0, 0); // Set to the start of the day
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0); // Set to the start of the day
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 
         const orders = await Order.find({
             createdAt: { $gte: today, $lt: tomorrow }
         });
-        return await new NextResponse(orders.length, {status:200});
+        console.log(typeof orders);
+        return await new NextResponse(JSON.stringify(orders), {status:200});
         // return new NextResponse('orders', {status:200});
     }catch (error){
         return new NextResponse("Database Error",{status: 500})

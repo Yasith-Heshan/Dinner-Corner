@@ -39,8 +39,10 @@ const OrderNow = () => {
         const orderItemsArray = mealList.map((meal) => `${meal.id}`);
         const orderItems = orderItemsArray.join(',')
         try {
-            const {data} = await axios.get('/api/order');
-            if(data<maximumOrderLimit){
+            const response = await axios.get('/api/order');
+            console.log(response);
+            console.log(response.data);
+            if(response.data.length<maximumOrderLimit){
                 setDisableOrder(true);
                 const response = await axios.post(`/api/order`, {
                     name, phoneNumber, orderItems
