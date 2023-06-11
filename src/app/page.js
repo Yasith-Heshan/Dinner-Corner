@@ -1,6 +1,7 @@
 import styles from './page.module.css'
 import Link from "next/link";
 import {pricesList} from "@/utils/priceList";
+import Image from "next/image";
 
 export default function Home() {
     return (
@@ -8,7 +9,7 @@ export default function Home() {
             <h1>Dinner Corner වෙත සාදරයෙන් පිළිගනිමු</h1>
             <div className={styles.gridcontainer}>
                 <div className={styles.column}>
-                    <img src="/dinner_plate.jpg" alt="Dinner Meal" className={styles.image}/>
+                    <Image src="/dinner_plate.jpg" alt="Dinner Meal" width={600} height={400} layout="responsive" className={styles.image} />
                 </div>
                 <div className={styles.column}>
                     <h2 className={styles.subtitle}>Dinner Corner යනු...</h2>
