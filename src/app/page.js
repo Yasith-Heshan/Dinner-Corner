@@ -22,7 +22,7 @@ export default function Home() {
                         <li>ලබා දෙන මුදලට උපරිම සාධාරණයක් ඉටු කරමින් ප්‍රණීත ආහර වේලක් ලබා දීමෙ අරමුනින් අප දිනකට අඩු
                             ඇනවුම් ප්‍රමාණයක් භාර ගනු ලැබේ.
                         </li>
-                        <li><span className={styles.specialNote}>මෙම සේවාව 11/06/2023 දින සිට ක්‍රියාත්මක වේ.</span> </li>
+                        {/*<li><span className={styles.specialNote}>මෙම සේවාව 11/06/2023 දින සිට ක්‍රියාත්මක වේ.</span> </li>*/}
                         <li>ඇනවුමක් භාර දීමට <span className={styles.thisLink}><Link
                             href={'/ordernow'}>මෙතනින්</Link></span> ඇනවුම් ලබා දෙන පිටුවට පිවිසෙන්න.
                         </li>
