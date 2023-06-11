@@ -8,6 +8,8 @@ import useSWR from "swr";
 const OrderNow = () => {
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
+    const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [mealId, setMealId] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [mealList, setMealList] = useState([]);
@@ -17,6 +19,13 @@ const OrderNow = () => {
     const [visible, setVisible] = useState(true);
     const maximumOrderLimit = 19;
 
+    useEffect(() => {
+        if (phoneNumber !== "" && !phoneNumberPattern.test(phoneNumber)) {
+            setPhoneNumberError(true);
+        } else {
+            setPhoneNumberError(false);
+        }
+    }, [phoneNumber]);
     const fetcher = (...args) => fetch(...args).then(res => res.json())
     const {data, error, isLoading} = useSWR('/api/order', fetcher);
 
@@ -40,20 +49,22 @@ const OrderNow = () => {
         try {
             const response = await axios.get('/api/order');
             if(response.data.length<maximumOrderLimit){
-                setDisableOrder(true);
-                const response = await axios.post(`/api/order`, {
-                    name, phoneNumber, orderItems
-                });
-                setDisplaySuccess(true);
-                setDisableOrder(false);
-                setName('');
-                setPhoneNumber('');
-                setQuantity(1);
-                setMealId(0);
-                setMealList([]);
-                setTimeout(() => {
-                    setDisplaySuccess(false);
-                }, 3000);
+                if(!phoneNumberError){
+                    setDisableOrder(true);
+                    const response = await axios.post(`/api/order`, {
+                        name, phoneNumber, orderItems
+                    });
+                    setDisplaySuccess(true);
+                    setDisableOrder(false);
+                    setName('');
+                    setPhoneNumber('');
+                    setQuantity(1);
+                    setMealId(0);
+                    setMealList([]);
+                    setTimeout(() => {
+                        setDisplaySuccess(false);
+                    }, 3000);
+                }
             }else{
                 setVisible(false);
                 setDisplaySuccess(true);
@@ -85,14 +96,14 @@ const OrderNow = () => {
                     displaySuccess && (
                         <div className={styles.successMsg}>
                             <span className={styles.successIcon}>&#10003;</span>
-                            <p>Success! Your message has been sent.</p>
+                            <p>ඇනවුම සාර්තකව ලැබුනි.</p>
                         </div>)
                 }
                 {
                     displayError && (
                         <div className={styles.errorMsg}>
                             <span className={styles.errorIcon}>&#10007;</span>
-                            <p>Error! Something went wrong.</p>
+                            <p>යම් වරදක් සිදුවී ඇත.</p>
                         </div>
                     )
                 }
@@ -113,8 +124,15 @@ const OrderNow = () => {
 
                     <div className={styles.formGroup}>
                         <label className={styles.label} htmlFor="phoneNumber">දුරකතන අංකය:</label>
-                        <input className={styles.input} type="tel" id="phoneNumber" value={phoneNumber}
-                               onChange={(e) => setPhoneNumber(e.target.value)} required/>
+                        <input
+                            className={styles.input}
+                            type="tel"
+                            id="phoneNumber"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            required
+                        />
+                        {phoneNumberError && <p className={styles.errorMessage}>Please enter a valid phone number.</p>}
                     </div>
 
                     <div className={styles.formGroup}>
