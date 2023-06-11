@@ -15,7 +15,6 @@ export const GET = async (request)=>{
         const orders = await Order.find({
             createdAt: { $gte: today, $lt: tomorrow }
         });
-        console.log(typeof orders);
         return await new NextResponse(JSON.stringify(orders), {status:200});
         // return new NextResponse('orders', {status:200});
     }catch (error){

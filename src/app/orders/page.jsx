@@ -2,6 +2,8 @@
 import OrderCard from "@/components/OrderCard/OrderCard";
 import useSWR from "swr";
 import axios from "axios";
+import styles from './page.module.css'
+
 
 const AcceptedOrders = () => {
     const fetcher = async (...args) => {
@@ -14,10 +16,10 @@ const AcceptedOrders = () => {
     return (
         <>
             {
-                isLoading && <div>Loading...</div>
+                isLoading && <div className={styles.loadingMsg}>Loading...</div>
             }
             {
-                error && <div>Error</div>
+                error && <div className={styles.errorMsg}>Something went wrong</div>
             }
             {
                data && data.map(
