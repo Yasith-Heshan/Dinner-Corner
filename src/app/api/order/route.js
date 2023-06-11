@@ -5,7 +5,6 @@ import Order from "@/models/order";
 export const GET = async (request)=>{
     try{
         await connect();
-        console.log('called');
         const today = new Date();
         today.setHours(0);
         today.setMinutes(0);

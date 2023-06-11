@@ -30,7 +30,6 @@ const OrderNow = () => {
         }else{
             setVisible(false);
         }
-        console.log(data);
     }, [data]);
 
 
@@ -40,8 +39,6 @@ const OrderNow = () => {
         const orderItems = orderItemsArray.join(',')
         try {
             const response = await axios.get('/api/order');
-            console.log(response);
-            console.log(response.data);
             if(response.data.length<maximumOrderLimit){
                 setDisableOrder(true);
                 const response = await axios.post(`/api/order`, {
