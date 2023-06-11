@@ -15,18 +15,22 @@ const OrderNow = () => {
     const [displayError, setDisplayError] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [visible, setVisible] = useState(true);
-    const maximumOrderLimit = 50;
+    const maximumOrderLimit = 19;
 
     const fetcher = (...args) => fetch(...args).then(res => res.json())
     const {data, error, isLoading} = useSWR('/api/order', fetcher);
 
     useEffect(() => {
-
-        if(data<maximumOrderLimit){
+        let count = 0;
+        if(data){
+            count = data.length;
+        }
+        if(count<maximumOrderLimit){
             setVisible(true);
         }else{
             setVisible(false);
         }
+        console.log(data);
     }, [data]);
 
 
