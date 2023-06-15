@@ -167,7 +167,7 @@ const OrderNow = () => {
                     <div className={styles.formGroup}>
                         <label className={styles.label} htmlFor="university">විශ්ව විද්‍යාලය:</label>
                         <select onChange={(e) => {
-                            if(e.target.value!=0){
+                            if(e.target.value!==0){
                                 setUniversityError(false);
                             }else{
                                 setUniversityError(true);
@@ -217,7 +217,7 @@ const OrderNow = () => {
                             <div className={styles.column2}>
                                 <div className={styles.buttonContainer}>
                                     <button
-                                        disabled={mealId == 0}
+                                        disabled={mealId === 0}
                                         className={styles.addButton}
                                         type="button"
                                         onClick={(e) => {

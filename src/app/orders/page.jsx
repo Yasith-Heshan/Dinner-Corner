@@ -38,7 +38,7 @@ const AcceptedOrders = () => {
                 >
                     <option value={0}></option>
                     {universityList.map((university,index) => (
-                        <option key={index} value={university.id}>
+                        <option key={index} value={university.id} className={styles.option}>
                             {university.university}
                         </option>
                     ))}
