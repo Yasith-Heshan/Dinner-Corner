@@ -56,6 +56,10 @@ const AcceptedOrders = () => {
             </div>
 
             <div>
+                {(new Date()).toString()}
+            </div>
+
+            <div>
                 {
                     orders && orders.map(
                         (order,index)=>{
