@@ -12,6 +12,10 @@ const orderSchema = new Schema(
             type: String,
             required: true,
         },
+        university:{
+            type: String,
+            required: true,
+        },
         orderItems:{
             type: String,
             required: true,

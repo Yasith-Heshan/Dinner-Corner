@@ -28,3 +28,19 @@
 .errorText {
     margin-left: 10px;
 }
+
+.dropdownContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Add this line */
+    margin-bottom: 10px;
+}
+
+.dropdownLabel {
+    margin-right: 10px;
+}
+
+.dropdown {
+    padding: 5px;
+    border-radius: 4px;
+}

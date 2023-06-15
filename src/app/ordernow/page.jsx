@@ -3,11 +3,13 @@ import {useEffect, useState} from "react";
 import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
 import axios from 'axios'
-import useSWR from "swr";
+import {universityList} from "@/utils/universityList";
 
 const OrderNow = () => {
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [university, setUniversity] = useState(0);
+    const [universityError, setUniversityError] = useState(false);
     const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [mealId, setMealId] = useState(0);
@@ -16,8 +18,9 @@ const OrderNow = () => {
     const [displaySuccess, setDisplaySuccess] = useState(false);
     const [displayError, setDisplayError] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
-    const [visible, setVisible] = useState(true);
-    const maximumOrderLimit = 19;
+    const [orderLimitError , setOrderLimitError] = useState('');
+    const maximumOrderLimit = 20;
+
 
     useEffect(() => {
         if (phoneNumber !== "" && !phoneNumberPattern.test(phoneNumber)) {
@@ -26,20 +29,14 @@ const OrderNow = () => {
             setPhoneNumberError(false);
         }
     }, [phoneNumber]);
-    const fetcher = (...args) => fetch(...args).then(res => res.json())
-    const {data, error, isLoading} = useSWR('/api/order', fetcher);
 
-    useEffect(() => {
-        let count = 0;
-        if(data){
-            count = data.length;
-        }
-        if(count<maximumOrderLimit){
-            setVisible(true);
-        }else{
-            setVisible(false);
-        }
-    }, [data]);
+
+    const getUniversity = (universityId)=>{
+        const universityObj = universityList.filter(
+            (obj)=>(obj.id==universityId)
+        );
+        return universityObj[0].university;
+    }
 
 
     const handleSubmit = async (e) => {
@@ -47,27 +44,49 @@ const OrderNow = () => {
         const orderItemsArray = mealList.map((meal) => `${meal.id}`);
         const orderItems = orderItemsArray.join(',')
         try {
-            const response = await axios.get('/api/order');
-            if(response.data.length<maximumOrderLimit){
-                if(!phoneNumberError){
-                    setDisableOrder(true);
-                    const response = await axios.post(`/api/order`, {
-                        name, phoneNumber, orderItems
-                    });
-                    setDisplaySuccess(true);
-                    setDisableOrder(false);
-                    setName('');
-                    setPhoneNumber('');
-                    setQuantity(1);
-                    setMealId(0);
-                    setMealList([]);
-                    setTimeout(() => {
-                        setDisplaySuccess(false);
-                    }, 3000);
+            const response = await axios.get(`/api/order/${university}`);
+            console.log(response.data.length);
+            if (response.data.length < maximumOrderLimit) {
+                if (!phoneNumberError) {
+                    if (university === 0||phoneNumber==='') {
+                        if(university===0){
+                            setUniversityError(true);
+                        }
+                        if(phoneNumber===''){
+                            setPhoneNumberError(true);
+                        }
+                    } else {
+                        setDisableOrder(true);
+                        const response = await axios.post(`/api/order`, {
+                            name, phoneNumber, university, orderItems
+                        });
+
+                        if(response.data==='Order has been created'){
+                            setDisplaySuccess(true);
+                            setDisableOrder(false);
+                            setName('');
+                            setPhoneNumber('');
+                            setUniversityError(false);
+                            setUniversity(0);
+                            setQuantity(1);
+                            setMealId(0);
+                            setMealList([]);
+                            setTimeout(() => {
+                                setDisplaySuccess(false);
+                            }, 3000);
+                        }else{
+                            setDisplayError(true);
+                            setDisableOrder(false);
+                            setTimeout(() => {
+                                setDisplayError(false)
+                            }, 3000);
+                        }
+                    }
                 }
-            }else{
-                setVisible(false);
-                setDisplaySuccess(true);
+            } else {
+                console.log('orders limit exceeded');
+                setOrderLimitError( `${getUniversity(university)} සඳහා උපරිම ඇනවුම් සීමාව ඉක්මවා ඇත.`)
+                setDisplaySuccess(false);
                 setDisableOrder(false);
                 setName('');
                 setPhoneNumber('');
@@ -89,7 +108,7 @@ const OrderNow = () => {
 
     return (
         <>
-            {visible? (<div className={styles.container}>
+            <div className={styles.container}>
                 <h1 className={styles.heading}>ඇනවුම් කරන්න</h1>
 
                 {
@@ -97,7 +116,8 @@ const OrderNow = () => {
                         <div className={styles.successMsg}>
                             <span className={styles.successIcon}>&#10003;</span>
                             <p>ඇනවුම සාර්තකව ලැබුනි.</p>
-                        </div>)
+                        </div>
+                    )
                 }
                 {
                     displayError && (
@@ -111,6 +131,14 @@ const OrderNow = () => {
                     disableOrder && (
                         <div className={styles.requested}>
                             <p>order requesting...</p>
+                        </div>
+                    )
+                }
+
+                {
+                    orderLimitError!=='' && (
+                        <div className={styles.errorMsg}>
+                            {orderLimitError}
                         </div>
                     )
                 }
@@ -129,10 +157,31 @@ const OrderNow = () => {
                             type="tel"
                             id="phoneNumber"
                             value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            onChange={(e) => setPhoneNumber(e.target.value)
+                            }
                             required
                         />
-                        {phoneNumberError && <p className={styles.errorMessage}>Please enter a valid phone number.</p>}
+                        {phoneNumberError && <p className={styles.errorMessage}>නිවැරදි දුරකතන අංකයක් ඇතුලත් කරන්න.</p>}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="university">විශ්ව විද්‍යාලය:</label>
+                        <select onChange={(e) => {
+                            if(e.target.value!=0){
+                                setUniversityError(false);
+                            }else{
+                                setUniversityError(true);
+                            }
+                            setUniversity(e.target.value)
+                        }} className={styles.input} id="university" value={university}>
+                            <option value={0}></option>
+                            {universityList.map(
+                                (e, index) => (
+                                    <option value={e.id} key={index}>{e.university}</option>
+                                )
+                            )}
+                        </select>
+                        {universityError && <p className={styles.errorMessage}>විශ්ව විද්‍යාලය තෝරන්න.</p>}
                     </div>
 
                     <div className={styles.formGroup}>
@@ -207,7 +256,6 @@ const OrderNow = () => {
                                                                     setMealList([...temp]);
                                                                 }
                                                             }
-
                                                     >ඉවත් කරන්න
                                                     </button>
                                                 </td>
@@ -230,11 +278,7 @@ const OrderNow = () => {
                             className={styles.submitButton}>ඇනවුම් කරන්න
                     </button>
                 </form>
-            </div>):(
-                <div className={styles.messageContainer}>
-                උපරිම ඇනයුම් ධාරිතාවය ඉක්මවා ඇත.
-                </div>
-            )}
+            </div>)
         </>
 
     );
