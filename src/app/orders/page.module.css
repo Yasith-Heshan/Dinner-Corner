@@ -30,20 +30,35 @@
 }
 
 .dropdownContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Add this line */
-    margin: 10px 0;
-    font-size: 20px;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .dropdownLabel {
-    margin-right: 10px;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .dropdown {
-    padding: 5px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+/* Media queries for responsive styles */
+
+@media (max-width: 768px) {
+    .dropdownLabel {
+        font-size: 14px;
+    }
+
+    .dropdown {
+        font-size: 14px;
+    }
 }
 
 .option{
