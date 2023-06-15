@@ -13,7 +13,6 @@ export const GET = async (request,{params})=>{
         today.setSeconds(0); // Set to the start of the day
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
-        console.log(today);
 
         const orders = await Order.find({
             createdAt: { $gte: today, $lt: tomorrow },
