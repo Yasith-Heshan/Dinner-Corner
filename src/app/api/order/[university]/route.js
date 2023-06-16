@@ -8,9 +8,10 @@ export const GET = async (request,{params})=>{
     try{
         await connect();
         const today = new Date();
-        today.setHours(0);
-        today.setMinutes(0);
-        today.setSeconds(0); // Set to the start of the day
+        // today.setHours(0);
+        // today.setMinutes(0);
+        // today.setSeconds(0); // Set to the start of the day
+        today.setUTCHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 

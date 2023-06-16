@@ -6,11 +6,15 @@ export const GET = async (request)=>{
     try{
         await connect();
         const today = new Date();
-        today.setHours(0);
-        today.setMinutes(0);
-        today.setSeconds(0); // Set to the start of the day
+        // today.setHours(0);
+        // today.setMinutes(0);
+        // today.setSeconds(0); // Set to the start of the day
+        today.setUTCHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
+
+        console.log(today);
+        console.log(tomorrow);
 
         const orders = await Order.find({
             createdAt: { $gte: today, $lt: tomorrow }

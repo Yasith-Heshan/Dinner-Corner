@@ -12,6 +12,17 @@ const AcceptedOrders = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
+    const today = new Date();
+    // today.setHours(0);
+    // today.setMinutes(0);
+    // today.setSeconds(0); // Set to the start of the day
+    today.setUTCHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    console.log('today:',today);
+    console.log('tomorrow:',tomorrow);
+
     return (
         <>
             <div className={styles.dropdownContainer}>
@@ -55,9 +66,9 @@ const AcceptedOrders = () => {
 
             </div>
 
-            <div>
-                {(new Date()).toString()}
-            </div>
+            {/*<div>*/}
+            {/*    {(new Date()).toString()}*/}
+            {/*</div>*/}
 
             <div>
                 {
