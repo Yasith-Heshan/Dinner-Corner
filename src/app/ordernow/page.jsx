@@ -20,7 +20,7 @@ const OrderNow = () => {
     const [displayError, setDisplayError] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [orderLimitError , setOrderLimitError] = useState('');
-    const maximumOrderLimit = 20;
+    const maximumOrderLimit = 4;
 
 
     useEffect(() => {
@@ -45,8 +45,16 @@ const OrderNow = () => {
         const orderItemsArray = mealList.map((meal) => `${meal.id}`);
         const orderItems = orderItemsArray.join(',')
         try {
+            setOrderLimitError( ``)
             const response = await axios.get(`/api/order/${university}`);
-            if (response.data.length < maximumOrderLimit) {
+            console.log(response.data);
+            const selectedOrders = response.data.filter(
+                (order)=>{
+                    return order.orderDate===format(new Date(),'dd-MM-yyyy')
+                }
+            )
+            console.log(selectedOrders);
+            if (selectedOrders.length < maximumOrderLimit) {
                 if (!phoneNumberError) {
                     if (university === 0||phoneNumber==='') {
                         if(university===0){
