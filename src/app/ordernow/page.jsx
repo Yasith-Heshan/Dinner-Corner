@@ -4,6 +4,7 @@ import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
 import axios from 'axios'
 import {universityList} from "@/utils/universityList";
+import {format} from "date-fns";
 
 const OrderNow = () => {
     const [name, setName] = useState('');
@@ -45,7 +46,6 @@ const OrderNow = () => {
         const orderItems = orderItemsArray.join(',')
         try {
             const response = await axios.get(`/api/order/${university}`);
-            console.log(response.data.length);
             if (response.data.length < maximumOrderLimit) {
                 if (!phoneNumberError) {
                     if (university === 0||phoneNumber==='') {
@@ -57,8 +57,9 @@ const OrderNow = () => {
                         }
                     } else {
                         setDisableOrder(true);
+                        const orderDate = format(new Date(),'dd-MM-yyyy')
                         const response = await axios.post(`/api/order`, {
-                            name, phoneNumber, university, orderItems
+                            name, phoneNumber, university, orderItems,orderDate
                         });
 
                         if(response.data==='Order has been created'){
@@ -84,7 +85,6 @@ const OrderNow = () => {
                     }
                 }
             } else {
-                console.log('orders limit exceeded');
                 setOrderLimitError( `${getUniversity(university)} සඳහා උපරිම ඇනවුම් සීමාව ඉක්මවා ඇත.`)
                 setDisplaySuccess(false);
                 setDisableOrder(false);

@@ -5,19 +5,8 @@ import Order from "@/models/order";
 export const GET = async (request)=>{
     try{
         await connect();
-        const today = new Date();
-        // today.setHours(0);
-        // today.setMinutes(0);
-        // today.setSeconds(0); // Set to the start of the day
-        today.setUTCHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-
-        console.log(today);
-        console.log(tomorrow);
 
         const orders = await Order.find({
-            createdAt: { $gte: today, $lt: tomorrow }
         });
         return await new NextResponse(JSON.stringify(orders), {status:200});
         // return new NextResponse('orders', {status:200});
@@ -27,11 +16,11 @@ export const GET = async (request)=>{
 }
 
 export const POST = async (request)=>{
-    const {name, phoneNumber,university, orderItems} = await request.json();
+    const {name, phoneNumber,university, orderItems,orderDate} = await request.json();
     await connect();
     const newOrder = new Order(
         {
-            name, phoneNumber,university, orderItems
+            name, phoneNumber,university, orderItems,orderDate
         }
     );
     try{

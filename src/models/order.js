@@ -20,8 +20,12 @@ const orderSchema = new Schema(
             type: String,
             required: true,
         },
+        orderDate:{
+            type: String,
+            required: true,
+        }
     },
-    {timestamps:true}
+    {timestamps:false}
 );
 
 export default mongoose.models.Order || mongoose.model("Order",orderSchema);

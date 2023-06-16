@@ -7,20 +7,11 @@ export const GET = async (request,{params})=>{
 
     try{
         await connect();
-        const today = new Date();
-        // today.setHours(0);
-        // today.setMinutes(0);
-        // today.setSeconds(0); // Set to the start of the day
-        today.setUTCHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
 
         const orders = await Order.find({
-            createdAt: { $gte: today, $lt: tomorrow },
             university:university,
         });
         return await new NextResponse(JSON.stringify(orders), {status:200});
-        // return new NextResponse('orders', {status:200});
     }catch (error){
         return new NextResponse("Database Error",{status: 500})
     }

@@ -4,6 +4,7 @@ import axios from "axios";
 import styles from './page.module.css'
 import {universityList} from "@/utils/universityList";
 import {useState} from "react";
+import {format} from "date-fns";
 
 
 const AcceptedOrders = () => {
@@ -12,16 +13,6 @@ const AcceptedOrders = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const today = new Date();
-    // today.setHours(0);
-    // today.setMinutes(0);
-    // today.setSeconds(0); // Set to the start of the day
-    today.setUTCHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    console.log('today:',today);
-    console.log('tomorrow:',tomorrow);
 
     return (
         <>
@@ -36,8 +27,15 @@ const AcceptedOrders = () => {
                             try {
                                 setIsLoading(true);
                                 setUniversity(e.target.value);
+                                setError('')
                                 const response = await axios.get(`/api/order/${e.target.value}`);
-                                setOrders(response.data);
+
+                                const selectedOrders = response.data.filter(
+                                    (order)=>{
+                                        return order.orderDate===format(new Date(),'dd-MM-yyyy')
+                                    }
+                                )
+                                setOrders(selectedOrders);
                                 setIsLoading(false);
                             }catch (e){
                                 setIsLoading(false);
@@ -66,9 +64,6 @@ const AcceptedOrders = () => {
 
             </div>
 
-            {/*<div>*/}
-            {/*    {(new Date()).toString()}*/}
-            {/*</div>*/}
 
             <div>
                 {
