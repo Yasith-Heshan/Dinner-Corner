@@ -23,7 +23,7 @@ const OrderCard = ({order,id})=>{
 
     return(
         <div className={styles.orderCard}>
-            <h3 className={styles.orderName}>{id+1}){order.name} - {getUniversity(order.university)}</h3>
+            <h3 className={styles.orderName}>{id+1}) {order.name} - {getUniversity(order.university)}</h3>
             <p className={styles.orderPhone}>{order.phoneNumber}</p>
             <p className={styles.orderDate}>{order.orderDate}</p>
             <ul className={styles.orderItems}>
