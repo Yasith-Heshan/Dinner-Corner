@@ -41,77 +41,82 @@ const OrderNow = () => {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const orderItemsArray = mealList.map((meal) => `${meal.id}`);
-        const orderItems = orderItemsArray.join(',')
-        try {
-            setOrderLimitError( ``)
-            const response = await axios.get(`/api/order/${university}`);
-            console.log(response.data);
-            const selectedOrders = response.data.filter(
-                (order)=>{
-                    return order.orderDate===format(new Date(),'dd-MM-yyyy')
-                }
-            )
-            console.log(selectedOrders);
-            if (selectedOrders.length < maximumOrderLimit) {
-                if (!phoneNumberError) {
-                    if (university === 0||phoneNumber==='') {
-                        if(university===0){
-                            setUniversityError(true);
-                        }
-                        if(phoneNumber===''){
-                            setPhoneNumberError(true);
-                        }
-                    } else {
-                        setDisableOrder(true);
-                        const orderDate = format(new Date(),'dd-MM-yyyy')
-                        const response = await axios.post(`/api/order`, {
-                            name, phoneNumber, university, orderItems,orderDate
-                        });
 
-                        if(response.data==='Order has been created'){
-                            setDisplaySuccess(true);
-                            setDisableOrder(false);
-                            setName('');
-                            setPhoneNumber('');
-                            setUniversityError(false);
-                            setUniversity(0);
-                            setQuantity(1);
-                            setMealId(0);
-                            setMealList([]);
-                            setTimeout(() => {
-                                setDisplaySuccess(false);
-                            }, 3000);
-                        }else{
-                            setDisplayError(true);
-                            setDisableOrder(false);
-                            setTimeout(() => {
-                                setDisplayError(false)
-                            }, 3000);
+        let text = "ඇනවුම ලබා දීම තහවුරු කරන්න.";
+        if (confirm(text) == true) {
+
+            e.preventDefault();
+            const orderItemsArray = mealList.map((meal) => `${meal.id}`);
+            const orderItems = orderItemsArray.join(',')
+            try {
+                setOrderLimitError(``)
+                const response = await axios.get(`/api/order/${university}`);
+                const selectedOrders = response.data.filter(
+                    (order) => {
+                        return order.orderDate === format(new Date(), 'dd-MM-yyyy')
+                    }
+                )
+                console.log(selectedOrders);
+                if (selectedOrders.length < maximumOrderLimit) {
+                    if (!phoneNumberError) {
+                        if (university === 0 || phoneNumber === '') {
+                            if (university === 0) {
+                                setUniversityError(true);
+                            }
+                            if (phoneNumber === '') {
+                                setPhoneNumberError(true);
+                            }
+                        } else {
+                            setDisableOrder(true);
+                            const orderDate = format(new Date(), 'dd-MM-yyyy')
+                            const response = await axios.post(`/api/order`, {
+                                name, phoneNumber, university, orderItems, orderDate
+                            });
+
+                            if (response.data === 'Order has been created') {
+                                setDisplaySuccess(true);
+                                setDisableOrder(false);
+                                setName('');
+                                setPhoneNumber('');
+                                setUniversityError(false);
+                                setUniversity(0);
+                                setQuantity(1);
+                                setMealId(0);
+                                setMealList([]);
+                                setTimeout(() => {
+                                    setDisplaySuccess(false);
+                                }, 3000);
+                            } else {
+                                setDisplayError(true);
+                                setDisableOrder(false);
+                                setTimeout(() => {
+                                    setDisplayError(false)
+                                }, 3000);
+                            }
                         }
                     }
+                } else {
+                    setOrderLimitError(`${getUniversity(university)} සඳහා උපරිම ඇනවුම් සීමාව ඉක්මවා ඇත.`)
+                    setDisplaySuccess(false);
+                    setDisableOrder(false);
+                    setName('');
+                    setPhoneNumber('');
+                    setQuantity(1);
+                    setMealId(0);
+                    setMealList([]);
                 }
-            } else {
-                setOrderLimitError( `${getUniversity(university)} සඳහා උපරිම ඇනවුම් සීමාව ඉක්මවා ඇත.`)
-                setDisplaySuccess(false);
+
+
+            } catch (error) {
+                setDisplayError(true);
                 setDisableOrder(false);
-                setName('');
-                setPhoneNumber('');
-                setQuantity(1);
-                setMealId(0);
-                setMealList([]);
+                setTimeout(() => {
+                    setDisplayError(false)
+                }, 3000);
+                console.error(error);
             }
-
-
-        } catch (error) {
-            setDisplayError(true);
-            setDisableOrder(false);
-            setTimeout(() => {
-                setDisplayError(false)
-            }, 3000);
-            console.error(error);
         }
+
     };
 
     return (

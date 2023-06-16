@@ -9,10 +9,10 @@ const pages = [
         title: 'ඇනවුම් කරන්න',
         url: '/ordernow'
     },
-    {
-        id: 2,
-        title: 'භාර දී ඇනවුම්',
-        url: '/orders',},
+    // {
+    //     id: 2,
+    //     title: 'භාර දී ඇනවුම්',
+    //     url: '/orders',},
 
 ]
 
