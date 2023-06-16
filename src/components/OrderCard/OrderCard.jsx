@@ -25,7 +25,7 @@ const OrderCard = ({order,id})=>{
         <div className={styles.orderCard}>
             <h3 className={styles.orderName}>{id+1}){order.name} - {getUniversity(order.university)}</h3>
             <p className={styles.orderPhone}>{order.phoneNumber}</p>
-            <p className={styles.orderDate}>{(new Date(order.createdAt)).toString()}</p>
+            <p className={styles.orderDate}>{order.orderDate}</p>
             <ul className={styles.orderItems}>
                 {order.orderItems.split(",").map(
                     (id,index) => {
