@@ -20,7 +20,7 @@ const OrderNow = () => {
     const [displayError, setDisplayError] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [orderLimitError , setOrderLimitError] = useState('');
-    const maximumOrderLimit = 10;
+    const maximumOrderLimit = 15;
 
 
     useEffect(() => {
