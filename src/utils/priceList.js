@@ -7,7 +7,8 @@ const mealType = {
     Veg: 'එළවළු කෑම',
     Egg: 'බිත්තර කෑම',
     Fish: 'මාළු කෑම',
-    Chicken: 'කුකුල් මස් කෑම'
+    Chicken: 'කුකුල් මස් කෑම',
+    ChickenFriedRice: 'Chicken Fried Rice'
 }
 export const pricesList = [
     {
@@ -72,6 +73,13 @@ export const pricesList = [
         size:size.Full,
         enoughFor:2,
         price:320,
+    },
+    {
+        id: 9,
+        type:mealType.ChickenFriedRice,
+        size:size.small,
+        enoughFor:2,
+        price:250,
     },
 
 
