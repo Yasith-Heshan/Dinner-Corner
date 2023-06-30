@@ -81,5 +81,12 @@ export const pricesList = [
         enoughFor:1,
         price:260,
     },
+    {
+        id: 10,
+        type:mealType.ChickenFriedRice,
+        size:size.Full,
+        enoughFor:2,
+        price:330,
+    },
 
 ]
