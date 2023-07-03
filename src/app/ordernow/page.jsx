@@ -56,7 +56,6 @@ const OrderNow = () => {
                         return order.orderDate === format(new Date(), 'dd-MM-yyyy')
                     }
                 )
-                console.log(selectedOrders);
                 if (selectedOrders.length < maximumOrderLimit) {
                     if (!phoneNumberError) {
                         if (university === 0 || phoneNumber === '') {
