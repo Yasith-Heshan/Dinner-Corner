@@ -5,6 +5,7 @@ import styles from './page.module.css'
 import {universityList} from "@/utils/universityList";
 import {useState} from "react";
 import {format} from "date-fns";
+import Categorise from "@/components/Categorise/Categorise";
 
 
 const AcceptedOrders = () => {
@@ -64,7 +65,7 @@ const AcceptedOrders = () => {
 
             </div>
 
-
+            <Categorise orders={orders}/>
             <div>
                 {
                     orders && orders.map(
