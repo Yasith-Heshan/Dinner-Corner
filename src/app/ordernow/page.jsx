@@ -4,7 +4,7 @@ import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
 import axios from 'axios'
 import {universityList} from "@/utils/universityList";
-import {format} from "date-fns";
+import {format, isAfter, isBefore, parse} from "date-fns";
 
 const OrderNow = () => {
     const [name, setName] = useState('');
@@ -18,6 +18,7 @@ const OrderNow = () => {
     const [mealList, setMealList] = useState([]);
     const [displaySuccess, setDisplaySuccess] = useState(false);
     const [displayError, setDisplayError] = useState(false);
+    const [displayLate, setDisplayLate] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [orderLimitError , setOrderLimitError] = useState('');
     const maximumOrderLimit = 13;
@@ -66,31 +67,41 @@ const OrderNow = () => {
                                 setPhoneNumberError(true);
                             }
                         } else {
-                            setDisableOrder(true);
-                            const orderDate = format(new Date(), 'dd-MM-yyyy')
-                            const response = await axios.post(`/api/order`, {
-                                name, phoneNumber, university, orderItems, orderDate
-                            });
+                            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 16:30`,'dd-MM-yyyy HH:mm',new Date())
+                            console.log(maximumOrderTime);
+                            if(isAfter(new Date(), maximumOrderTime)){
+                                setDisplayLate(true);
+                                setTimeout(() => {
+                                    setDisplayLate(false)
+                                }, 3000);
+                            }
+                            else{
+                                setDisableOrder(true);
+                                const orderDate = format(new Date(), 'dd-MM-yyyy')
+                                const response = await axios.post(`/api/order`, {
+                                    name, phoneNumber, university, orderItems, orderDate
+                                });
 
-                            if (response.data === 'Order has been created') {
-                                setDisplaySuccess(true);
-                                setDisableOrder(false);
-                                setName('');
-                                setPhoneNumber('');
-                                setUniversityError(false);
-                                setUniversity(0);
-                                setQuantity(1);
-                                setMealId(0);
-                                setMealList([]);
-                                setTimeout(() => {
-                                    setDisplaySuccess(false);
-                                }, 3000);
-                            } else {
-                                setDisplayError(true);
-                                setDisableOrder(false);
-                                setTimeout(() => {
-                                    setDisplayError(false)
-                                }, 3000);
+                                if (response.data === 'Order has been created') {
+                                    setDisplaySuccess(true);
+                                    setDisableOrder(false);
+                                    setName('');
+                                    setPhoneNumber('');
+                                    setUniversityError(false);
+                                    setUniversity(0);
+                                    setQuantity(1);
+                                    setMealId(0);
+                                    setMealList([]);
+                                    setTimeout(() => {
+                                        setDisplaySuccess(false);
+                                    }, 3000);
+                                } else {
+                                    setDisplayError(true);
+                                    setDisableOrder(false);
+                                    setTimeout(() => {
+                                        setDisplayError(false)
+                                    }, 3000);
+                                }
                             }
                         }
                     }
@@ -142,6 +153,14 @@ const OrderNow = () => {
                         <div className={styles.errorMsg}>
                             <span className={styles.errorIcon}>&#10007;</span>
                             <p>යම් වරදක් සිදුවී ඇත.</p>
+                        </div>
+                    )
+                }
+                {
+                    displayLate && (
+                        <div className={styles.errorMsg}>
+                            <span className={styles.errorIcon}>&#10007;</span>
+                            <p>කණගාටුයි, නියමිත වේලාවට ප්‍රවාහනය කිරීමට අවශ්‍ය බැවින් 04:30 න් පසු ලැබෙන ඇනවුම් භාර ගනු නොලැබේ.</p>
                         </div>
                     )
                 }
