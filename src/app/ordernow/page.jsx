@@ -69,6 +69,7 @@ const OrderNow = () => {
                         } else {
                             const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 16:30`,'dd-MM-yyyy HH:mm',new Date())
                             console.log(maximumOrderTime);
+                            console.log(new Date())
                             if(isAfter(new Date(), maximumOrderTime)){
                                 setDisplayLate(true);
                                 setTimeout(() => {
