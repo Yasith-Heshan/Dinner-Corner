@@ -1,8 +1,11 @@
+'use client'
 import './globals.css'
 import {Inter} from 'next/font/google'
 import NavBar from "@/components/Navbar/Navbar";
+import {AuthContextProvider} from "@/app/context/AuthContext";
 
-const inter = Inter({ subsets: ['latin'] })
+
+const inter = Inter({subsets: ['latin']})
 
 
 export const metadata = {
@@ -10,13 +13,15 @@ export const metadata = {
     description: 'Buy delicious dinner for the lowest price.',
 }
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-      <NavBar/>
-      {children}
-      </body>
-    </html>
-  )
+export default function RootLayout({children}) {
+    return (
+        <html lang="en">
+        <body className={inter.className}>
+        <AuthContextProvider>
+            <NavBar/>
+            {children}
+        </AuthContextProvider>
+        </body>
+        </html>
+    )
 }

@@ -75,7 +75,7 @@ const OrderNow = () => {
                                 }, 3000);
                             }
                             else{
-                                setDisableOrder(true);
+                                setDisableOrder(true);1997
                                 const orderDate = format(new Date(), 'dd-MM-yyyy')
                                 const response = await axios.post(`/api/order`, {
                                     name, phoneNumber, university, orderItems, orderDate
