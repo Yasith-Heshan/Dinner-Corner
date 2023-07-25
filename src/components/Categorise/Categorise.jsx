@@ -31,6 +31,7 @@ const Categorise = ({orders})=>{
                                 <tr key={index}>
                                     <td>{item.type}</td>
                                     <td>{item.size}</td>
+                                    <td>එකක් රු. {item.price}/=</td>
                                     <td>{itemCount[id]}</td>
                                 </tr>
                                 );
