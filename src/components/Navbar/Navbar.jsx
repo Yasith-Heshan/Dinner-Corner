@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from './Navbar.module.css'
 import {usePathname} from "next/navigation";
 import {UserAuth} from "@/app/context/AuthContext";
-import {useState} from "react";
+import React, {useState} from "react";
 
 const pages = [
     {
@@ -70,11 +70,11 @@ const NavBar = () => {
             <ul className={styles.navLinks}>
                 {
                     pages.map(
-                        (page) => {
+                        (page,index) => {
 
                             const isActive = pathname.startsWith(page.url)
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     {
                                         page.id !== 2 && page.id !== 3 && page.id !== 4 &&
                                         (<li key={page.id}>
@@ -120,7 +120,7 @@ const NavBar = () => {
                                         )
                                     }
 
-                                </>
+                                </React.Fragment>
                             );
 
                         }
