@@ -11,7 +11,7 @@ const mealType = {
     Chicken: 'කුකුල් මස් කෑම',
     ChickenFriedRice: 'Chicken Fried Rice',
     EggKottu:'Egg Kottu',
-    ChickenKottu: 'ChickenKottu'
+    ChickenKottu: 'Chicken Kottu'
 }
 export const pricesList = [
     {
