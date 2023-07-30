@@ -14,28 +14,11 @@ import {useRouter} from "next/navigation";
 
 
 const OrderNow = () => {
-    const {user,googleSignIn} = UserAuth();
-    const router = useRouter()
-
-    const handleSignIn = async ()=>{
-        try{
-            await googleSignIn();
-        }catch (error){
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-
-        if(!user){
-            handleSignIn()
-        }
-    }, [user]);
-
-
+    const {user,googleSignInWithRedirect} = UserAuth();
+    const [loading, setLoading] = useState(false);
     const [name, setName] = useState(user?user.displayName:'');
     const [nameError, setNameError] = useState('');
-    
+
     const [phoneNumber, setPhoneNumber] = useState('');
     const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState('');
@@ -57,7 +40,6 @@ const OrderNow = () => {
     const [orderLimitError, setOrderLimitError] = useState('');
     const maximumOrderLimit = 13;
 
-
     useEffect(() => {
         if (phoneNumber !== "" && !phoneNumberPattern.test(phoneNumber)) {
             setPhoneNumberError(customerPhoneNumberError);
@@ -75,6 +57,51 @@ const OrderNow = () => {
 
 
     }, [phoneNumber, name, mealList]);
+
+    useEffect(() => {
+
+        if(user){
+            setLoading(false);
+        }
+    }, []);
+
+    const handleSignIn = async ()=>{
+        try{
+            setLoading(true);
+            await googleSignInWithRedirect();
+        }catch (error){
+            console.log(error);
+        }
+    }
+
+    if(loading){
+        return (
+            <div className={styles.container}>
+                <Spinner/>
+            </div>
+        );
+    }
+
+    if (!user && !loading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.loginContainer}>
+                    <h1>Please sign in to place an order</h1>
+                    <button className={styles.loginButton} onClick={handleSignIn}>Login</button>
+                </div>
+            </div>
+
+        );
+    }
+
+
+
+
+
+
+
+
+
 
 
     const handleSubmit = async (e) => {

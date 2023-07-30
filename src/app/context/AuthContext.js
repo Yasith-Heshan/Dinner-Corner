@@ -8,18 +8,22 @@ const AuthContext = createContext()
 export const AuthContextProvider = ({children}) =>{
     const [user, setUser] = useState(null);
 
-    const googleSignIn = () =>{
+    const googleSignIn = async () =>{
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider);
+        await signInWithPopup(auth, provider);
     }
 
-    const googleSignInWithRedirect = ()=>{
-        const provider = new GoogleAuthProvider();
-        signInWithRedirect(auth, provider);
+    const googleSignInWithRedirect = async ()=>{
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider);
+        }catch (error){
+        }
+
     }
 
-    const logout = ()=>{
-        signOut(auth);
+    const logout = async ()=>{
+        await signOut(auth);
     }
 
     useEffect(() => {
