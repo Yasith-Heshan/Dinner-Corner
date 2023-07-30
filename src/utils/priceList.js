@@ -122,14 +122,14 @@ export const pricesList = [
         price:400,
     },
     {
-        id: 14,
+        id: 15,
         type:mealType.ChickenKottu,
         size:size.Small,
         enoughFor:1,
         price:450,
     },
     {
-        id: 15,
+        id: 16,
         type:mealType.ChickenKottu,
         size:size.Full,
         enoughFor:2,
