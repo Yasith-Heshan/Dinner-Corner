@@ -105,7 +105,7 @@ export const pricesList = [
         type:mealType.ChickenFriedRice,
         size:size.Full,
         enoughFor:2,
-        price:360,
+        price:350,
     },
     {
         id: 13,
