@@ -5,7 +5,7 @@ import {pricesList} from "@/utils/priceList";
 import axios from 'axios'
 import {universityList} from "@/utils/universityList";
 
-import {format, isAfter, isBefore, parse} from "date-fns";
+import {format, isAfter,  parse} from "date-fns";
 
 const OrderNow = () => {
     const [name, setName] = useState('');
@@ -129,11 +129,11 @@ const OrderNow = () => {
 
     };
 
-    return (
-      <div className={styles.container}>
-          <h1 className={styles.heading}>අද(12/08/2023) දින මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
-      </div>
-    );
+    // return (
+    //   <div className={styles.container}>
+    //       <h1 className={styles.heading}>අද(12/08/2023) දින මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
+    //   </div>
+    // );
 
     return (
         <>
