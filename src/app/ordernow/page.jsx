@@ -129,11 +129,11 @@ const OrderNow = () => {
 
     };
 
-    return (
-      <div className={styles.container}>
-          <h1 className={styles.heading}>අද(13/08/2023) දින මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
-      </div>
-    );
+    // return (
+    //   <div className={styles.container}>
+    //       <h1 className={styles.heading}>අද(13/08/2023) දින මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
+    //   </div>
+    // );
 
     return (
         <>
