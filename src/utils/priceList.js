@@ -6,7 +6,7 @@ const size = {
 const mealType = {
     Veg: 'එළවළු කෑම',
     Egg: 'බිත්තර කෑම',
-    Omelet:'බිත්තර ඔම්ලට්',
+    Omelet:'ඔම්ලට්',
     Fish: 'මාළු කෑම',
     Chicken: 'කුකුල් මස් කෑම',
     ChickenFriedRice: 'Chicken Fried Rice',
