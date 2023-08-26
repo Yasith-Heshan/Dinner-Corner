@@ -33,11 +33,10 @@ const pages = [
 const NavBar = () => {
     const pathname = usePathname();
 
-    const {user,googleSignIn, logout} = UserAuth();
+    const {user,googleSignIn,googleSignInWithRedirect, logout} = UserAuth();
 
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log(user);
 
     const handleToggle = () => {
         setIsOpen(!isOpen);

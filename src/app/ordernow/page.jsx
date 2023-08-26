@@ -4,7 +4,7 @@ import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
 import axios from 'axios'
 import {universityList} from "@/utils/universityList";
-import {collection, addDoc, serverTimestamp} from 'firebase/firestore'
+import {collection, addDoc, serverTimestamp,getDocs,query,where} from 'firebase/firestore'
 import {db} from '../firebase'
 import {format, isAfter, isBefore, parse} from "date-fns";
 import {customerNameError, customerPhoneNumberError, emptyCartError} from "@/utils/errorMessages";
@@ -14,7 +14,7 @@ import {useRouter} from "next/navigation";
 
 
 const OrderNow = () => {
-    const {user,googleSignInWithRedirect} = UserAuth();
+    const {user,googleSignInWithRedirect,googleSignIn} = UserAuth();
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(user?user.displayName:'');
     const [nameError, setNameError] = useState('');
@@ -23,7 +23,8 @@ const OrderNow = () => {
     const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState('');
 
-    const [date, setDate] = useState(new Date());
+    // const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [dateError, setDateError] = useState('');
 
     const [mealId, setMealId] = useState(0);
@@ -57,18 +58,18 @@ const OrderNow = () => {
 
 
     }, [phoneNumber, name, mealList]);
-
     useEffect(() => {
 
         if(user){
             setLoading(false);
         }
-    }, []);
+    }, [user]);
 
     const handleSignIn = async ()=>{
         try{
             setLoading(true);
-            await googleSignInWithRedirect();
+            await googleSignIn();
+            setLoading(false);
         }catch (error){
             console.log(error);
         }
@@ -95,18 +96,8 @@ const OrderNow = () => {
     }
 
 
-
-
-
-
-
-
-
-
-
     const handleSubmit = async (e) => {
 
-        setDisableOrder(true);
         if (name.length === 0) {
             setNameError(customerNameError);
             return;
@@ -122,19 +113,33 @@ const OrderNow = () => {
             return;
         }
 
+        if(date === ''){
+            setDateError('වැරදි දිනයකි!')
+            return
+        }
+
+        setDisableOrder(true);
 
         try {
             setRequestingOrder(true);
+            const q = query(collection(db, "orders"), where("orderDate", "==", date));
+            const querySnapshot = await getDocs(q);
+            if(querySnapshot.docs.length>=maximumOrderLimit){
+                setOrderLimitError(`කණගාටුයි, ${date} දිනය සඳහා උපරිම ඇනවුම් ධාරිතාව ඉක්මවා ඇත.`)
+                return
+            }
             const idList = mealList.map((meal) => meal.id);
             const docRef = await addDoc(collection(db, 'orders'),
                 {
                     name,
                     phoneNumber,
                     orderItems: idList.join(','),
-                    orderDate: format(new Date, 'yyyy-MM-dd'),
+                    orderDate: date,
                     createdAt: serverTimestamp(),
-                });
+                }
+                );
             postSuccessFunctions();
+
 
 
         } catch (error) {
@@ -142,6 +147,8 @@ const OrderNow = () => {
             setTimeout(() => {
                 setDisplayError(false)
             }, 5000)
+            setDisableOrder(false);
+            setRequestingOrder(false)
             console.error(error);
         }
 
@@ -170,6 +177,8 @@ const OrderNow = () => {
         setDisableOrder(false);
         setOrderLimitError('');
         setDisableOrder(false);
+        setDate(new Date().toISOString().split('T')[0]);
+        setDateError('');
     }
 
     return (
