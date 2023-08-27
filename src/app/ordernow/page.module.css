@@ -234,6 +234,8 @@
     align-items: center;
     background-color: #ffcccc;
     padding: 10px;
+    font-weight: bold;
+    color: red;
     border-radius: 4px;
     margin-top: 15px;
 }

@@ -2,19 +2,16 @@
 import {useEffect, useState} from "react";
 import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
-import axios from 'axios'
-import {universityList} from "@/utils/universityList";
-import {collection, addDoc, serverTimestamp,getDocs,query,where} from 'firebase/firestore'
+import {collection, addDoc, serverTimestamp,query,where,getCountFromServer} from 'firebase/firestore'
 import {db} from '../firebase'
-import {format, isAfter, isBefore, parse} from "date-fns";
 import {customerNameError, customerPhoneNumberError, emptyCartError} from "@/utils/errorMessages";
 import Spinner from "@/components/Spinner/Spinner";
 import {UserAuth} from "@/app/context/AuthContext";
-import {useRouter} from "next/navigation";
+import {format} from "date-fns";
 
 
 const OrderNow = () => {
-    const {user,googleSignInWithRedirect,googleSignIn} = UserAuth();
+    const {user,googleSignIn} = UserAuth();
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(user?user.displayName:'');
     const [nameError, setNameError] = useState('');
@@ -23,8 +20,7 @@ const OrderNow = () => {
     const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState('');
 
-    // const [date, setDate] = useState(new Date());
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [date, setDate] = useState(format(new Date(),'yyyy-MM-dd'));
     const [dateError, setDateError] = useState('');
 
     const [mealId, setMealId] = useState(0);
@@ -39,7 +35,7 @@ const OrderNow = () => {
     const [displayLate, setDisplayLate] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [orderLimitError, setOrderLimitError] = useState('');
-    const maximumOrderLimit = 13;
+    const maximumOrderLimit = 20;
 
     useEffect(() => {
         if (phoneNumber !== "" && !phoneNumberPattern.test(phoneNumber)) {
@@ -62,6 +58,7 @@ const OrderNow = () => {
 
         if(user){
             setLoading(false);
+            setName(user.displayName)
         }
     }, [user]);
 
@@ -123,8 +120,11 @@ const OrderNow = () => {
         try {
             setRequestingOrder(true);
             const q = query(collection(db, "orders"), where("orderDate", "==", date));
-            const querySnapshot = await getDocs(q);
-            if(querySnapshot.docs.length>=maximumOrderLimit){
+            const querySnapshot = await getCountFromServer(q);
+            console.log(querySnapshot.data().count);
+            if(querySnapshot.data().count>=maximumOrderLimit){
+                setDisableOrder(false);
+                setRequestingOrder(false);
                 setOrderLimitError(`කණගාටුයි, ${date} දිනය සඳහා උපරිම ඇනවුම් ධාරිතාව ඉක්මවා ඇත.`)
                 return
             }
@@ -133,6 +133,7 @@ const OrderNow = () => {
                 {
                     name,
                     phoneNumber,
+                    email:user.email,
                     orderItems: idList.join(','),
                     orderDate: date,
                     createdAt: serverTimestamp(),
@@ -177,7 +178,7 @@ const OrderNow = () => {
         setDisableOrder(false);
         setOrderLimitError('');
         setDisableOrder(false);
-        setDate(new Date().toISOString().split('T')[0]);
+        setDate(format(new Date(),'yyyy-MM-dd'));
         setDateError('');
     }
 
@@ -222,6 +223,7 @@ const OrderNow = () => {
                 {
                     orderLimitError !== '' && (
                         <div className={styles.errorMsg}>
+                            <span className={styles.errorIcon}>&#10007;</span>
                             {orderLimitError}
                         </div>
                     )

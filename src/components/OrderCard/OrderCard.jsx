@@ -14,16 +14,12 @@ const OrderCard = ({order,id})=>{
         return total;
     }
 
-    const getUniversity = (universityId)=>{
-        const universityObj = universityList.filter(
-            (obj)=>(obj.id==universityId)
-        );
-        return universityObj[0].university;
-    }
+
 
     return(
         <div className={styles.orderCard}>
-            <h3 className={styles.orderName}>{id+1}) {order.name} - {getUniversity(order.university)}</h3>
+            <h3 className={styles.orderName}>{id+1}) {order.name}</h3>
+            <p className={styles.orderPhone}>{order.email}</p>
             <p className={styles.orderPhone}>{order.phoneNumber}</p>
             <p className={styles.orderDate}>{order.orderDate}</p>
             <ul className={styles.orderItems}>

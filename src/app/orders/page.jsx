@@ -1,63 +1,72 @@
 "use client"
 import OrderCard from "@/components/OrderCard/OrderCard";
-import axios from "axios";
 import styles from './page.module.css'
-import {universityList} from "@/utils/universityList";
-import {useState} from "react";
-import {format} from "date-fns";
+import {useEffect, useState} from "react";
 import Categorise from "@/components/Categorise/Categorise";
+import {UserAuth} from "@/app/context/AuthContext";
+import Spinner from "@/components/Spinner/Spinner";
+import {db} from '../firebase'
+import {collection, getDocs, query, where,onSnapshot,orderBy} from "firebase/firestore";
+import {format} from "date-fns";
+import { useRouter } from 'next/navigation'
+
 
 
 const AcceptedOrders = () => {
-    const [university, setUniversity] = useState(0);
+    const {user,googleSignIn} = UserAuth();
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [customer, setCustomer] = useState(false);
+    const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL]
+    const router = useRouter()
+
+
+    useEffect(() => {
+
+        if(user) {
+            setIsLoading(true);
+            let q = query(collection(db, "orders"),
+                where("orderDate", "==", format(new Date(),'yyyy-MM-dd')),
+                where("email", "==", user.email),
+            );
+            if(company_emails.includes(user.email)){
+                q = query(collection(db, "orders"),
+                    where("orderDate", "==", format(new Date(),'yyyy-MM-dd')),
+                );
+            }
+            let temp = [...orders];
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    temp.push(change.doc.data())
+                });
+                console.log(temp);
+                setOrders(temp);
+                setIsLoading(false);
+
+            });
+
+            return ()=>{
+                unsubscribe();
+            };
+
+        }else{
+            router.push('/')
+        }
+    }, [user]);
+
+
+    if(!user){
+        return <></>
+    }
 
 
     return (
         <>
-            <div className={styles.dropdownContainer}>
-                <label className={styles.dropdownLabel} htmlFor="university">විශ්ව විද්‍යාලය:</label>
-                <select
-                    id="university"
-                    className={styles.dropdown}
-                    value={university}
-                    onChange={
-                        async (e) => {
-                            try {
-                                setIsLoading(true);
-                                setUniversity(e.target.value);
-                                setError('')
-                                const response = await axios.get(`/api/order/${e.target.value}`);
-
-                                const selectedOrders = response.data.filter(
-                                    (order)=>{
-                                        return order.orderDate===format(new Date(),'dd-MM-yyyy')
-                                    }
-                                )
-                                setOrders(selectedOrders);
-                                setIsLoading(false);
-                            }catch (e){
-                                setIsLoading(false);
-                                setError('යම් වරදක් සිදු වී ඇත.')
-                            }
-
-                        }
-                    }
-                >
-                    <option value={0}></option>
-                    {universityList.map((university,index) => (
-                        <option key={index} value={university.id} className={styles.option}>
-                            {university.university}
-                        </option>
-                    ))}
-                </select>
-            </div>
 
             <div>
                 {
-                    isLoading && <div className={styles.loadingMsg}>Loading...</div>
+                    isLoading && <div className={styles.loadingMsg}><Spinner/></div>
                 }
                 {
                     error && <div className={styles.errorMsg}>{error}</div>
@@ -65,7 +74,11 @@ const AcceptedOrders = () => {
 
             </div>
 
-            <Categorise orders={orders}/>
+            {
+               company_emails.includes(user.email) && (
+                    <Categorise orders={orders}/>
+                )
+            }
             <div>
                 {
                     orders && orders.map(
