@@ -2,31 +2,37 @@
 import {useEffect, useState} from "react";
 import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
-import {collection, addDoc, serverTimestamp,query,where,getCountFromServer} from 'firebase/firestore'
+import {collection, addDoc, serverTimestamp, query, where, getCountFromServer} from 'firebase/firestore'
 import {db} from '../firebase'
-import {customerNameError, customerPhoneNumberError, emptyCartError} from "@/utils/errorMessages";
+import {customerNameError, customerPhoneNumberError, customerPlaceError, emptyCartError} from "@/utils/errorMessages";
 import Spinner from "@/components/Spinner/Spinner";
 import {UserAuth} from "@/app/context/AuthContext";
 import {format} from "date-fns";
+import {PLACES, STATUS} from "@/utils/constants";
 
 
 const OrderNow = () => {
-    const {user,googleSignIn} = UserAuth();
+    const {user, googleSignIn} = UserAuth();
     const [loading, setLoading] = useState(false);
-    const [name, setName] = useState(user?user.displayName:'');
+    const [name, setName] = useState(user ? user.displayName : '');
     const [nameError, setNameError] = useState('');
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState('');
 
-    const [date, setDate] = useState(format(new Date(),'yyyy-MM-dd'));
+    const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
     const [dateError, setDateError] = useState('');
 
     const [mealId, setMealId] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [mealList, setMealList] = useState([]);
     const [mealListError, setMealListError] = useState('');
+
+    const [place, setPlace] = useState('');
+    const [placeError, setPlaceError] = useState('');
+
+    const [specialNotes, setSpecialNotes] = useState('');
 
     const [requestingOrder, setRequestingOrder] = useState(false);
 
@@ -56,23 +62,23 @@ const OrderNow = () => {
     }, [phoneNumber, name, mealList]);
     useEffect(() => {
 
-        if(user){
+        if (user) {
             setLoading(false);
             setName(user.displayName)
         }
     }, [user]);
 
-    const handleSignIn = async ()=>{
-        try{
+    const handleSignIn = async () => {
+        try {
             setLoading(true);
             await googleSignIn();
             setLoading(false);
-        }catch (error){
+        } catch (error) {
             console.log(error);
         }
     }
 
-    if(loading){
+    if (loading) {
         return (
             <div className={styles.container}>
                 <Spinner/>
@@ -105,12 +111,17 @@ const OrderNow = () => {
             return;
         }
 
+        if (place.length === 0) {
+            setPlaceError(customerPlaceError);
+            return;
+        }
+
         if (mealList.length === 0) {
             setMealListError(emptyCartError);
             return;
         }
 
-        if(date === ''){
+        if (date === '') {
             setDateError('වැරදි දිනයකි!')
             return
         }
@@ -122,7 +133,7 @@ const OrderNow = () => {
             const q = query(collection(db, "orders"), where("orderDate", "==", date));
             const querySnapshot = await getCountFromServer(q);
             console.log(querySnapshot.data().count);
-            if(querySnapshot.data().count>=maximumOrderLimit){
+            if (querySnapshot.data().count >= maximumOrderLimit) {
                 setDisableOrder(false);
                 setRequestingOrder(false);
                 setOrderLimitError(`කණගාටුයි, ${date} දිනය සඳහා උපරිම ඇනවුම් ධාරිතාව ඉක්මවා ඇත.`)
@@ -133,14 +144,17 @@ const OrderNow = () => {
                 {
                     name,
                     phoneNumber,
-                    email:user.email,
+                    email: user.email,
                     orderItems: idList.join(','),
                     orderDate: date,
+                    place,
                     createdAt: serverTimestamp(),
+                    status: STATUS.pending,
+                    mapUrl: '',
+                    specialNotes,
                 }
-                );
+            );
             postSuccessFunctions();
-
 
 
         } catch (error) {
@@ -170,6 +184,7 @@ const OrderNow = () => {
         setName('');
         setPhoneNumber('');
         setPhoneNumberError(false);
+        setPlace('');
         setMealList([]);
         setMealId(0);
         setQuantity(1);
@@ -178,8 +193,9 @@ const OrderNow = () => {
         setDisableOrder(false);
         setOrderLimitError('');
         setDisableOrder(false);
-        setDate(format(new Date(),'yyyy-MM-dd'));
+        setDate(format(new Date(), 'yyyy-MM-dd'));
         setDateError('');
+        setSpecialNotes('');
     }
 
     return (
@@ -248,7 +264,7 @@ const OrderNow = () => {
                             }
                             required
                         />
-                        {phoneNumberError.length!==0 && <p className={styles.errorMessage}>{phoneNumberError}</p>}
+                        {phoneNumberError.length !== 0 && <p className={styles.errorMessage}>{phoneNumberError}</p>}
                     </div>
 
                     <div className={styles.formGroup}>
@@ -262,7 +278,22 @@ const OrderNow = () => {
                             }
                             required
                         />
-                        {dateError.length!==0 && <p className={styles.errorMessage}>{dateError}</p>}
+                        {dateError.length !== 0 && <p className={styles.errorMessage}>{dateError}</p>}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="qty">ස්ථානය:</label>
+                        <select onChange={(e) => {
+                            setPlace(e.target.value)
+                        }} className={styles.input} id="place" value={place}>
+                            {['', PLACES.frontGate, PLACES.backGate, PLACES.boardingPlace].map(
+                                (e) => (
+                                    <option value={e} key={e}>{e}</option>
+                                )
+                            )}
+                        </select>
+                        {placeError.length !== 0 && <p className={styles.errorMessage}>{placeError}</p>}
+                        {place==='Boarding Place' && <p className={styles.successMsg}>කරුණාකර ඇනවුම් කිරීමෙන් පසු ඔබේ නවාතැන්පල පිහිටි ස්ථානය 0714748483 අංකයට email address එක සමඟ whatsapp කරන්න.</p> }
                     </div>
 
 
@@ -296,6 +327,7 @@ const OrderNow = () => {
                                     )}
                                 </select>
                                 {mealListError.length !== 0 && <p className={styles.errorMessage}>{mealListError}</p>}
+
                             </div>
                             <div className={styles.column2}>
                                 <div className={styles.buttonContainer}>
@@ -357,9 +389,14 @@ const OrderNow = () => {
                     </div>
 
                     <br/>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="specialNotes">විශේෂ සටහන්:</label>
+                        <input className={styles.input} type="text" id="specialNotes" value={specialNotes}
+                               onChange={(e) => setSpecialNotes(e.target.value)} required/>
+                    </div>
                     <button disabled={disableOrder} onClick={handleSubmit} type="button"
                             className={styles.submitButton}>
-                        {requestingOrder?<Spinner/>:'ඇනවුම් කරන්න'}
+                        {requestingOrder ? <Spinner/> : 'ඇනවුම් කරන්න'}
                     </button>
                 </form>
             </div>

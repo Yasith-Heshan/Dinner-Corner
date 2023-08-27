@@ -12,11 +12,10 @@ const Login = () => {
     const handleLogin = () => {
         setIsLoading(true);
 
-        // Simulating a login process with a delay of 1.5 seconds
         setTimeout(() => {
             setIsLoading(false);
             router.push('/orderNow'); // Replace 'dashboard' with your actual authenticated page
-        }, 1500);
+        }, 1000);
     };
 
     return (

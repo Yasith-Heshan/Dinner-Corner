@@ -24,6 +24,20 @@ const AcceptedOrders = () => {
 
     useEffect(() => {
 
+        const fetch=async (q)=>{
+            const  temp = [];
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                temp.push(
+                    {...doc.data(), id:doc.id}
+                );
+            });
+            temp.sort(
+                (a,b)=>a.createdAt-b.createdAt
+            )
+            setOrders(temp);
+        }
+
         if(user) {
             setIsLoading(true);
             let q = query(collection(db, "orders"),
@@ -35,15 +49,12 @@ const AcceptedOrders = () => {
                     where("orderDate", "==", format(new Date(),'yyyy-MM-dd')),
                 );
             }
-            let temp = [...orders];
             const unsubscribe = onSnapshot(q, (snapshot) => {
+                let temp = [...orders];
                 snapshot.docChanges().forEach((change) => {
-                    temp.push(change.doc.data())
+                    fetch(q);
                 });
-                console.log(temp);
-                setOrders(temp);
                 setIsLoading(false);
-
             });
 
             return ()=>{
@@ -84,7 +95,7 @@ const AcceptedOrders = () => {
                     orders && orders.map(
                         (order,index)=>{
                             const orderJson = JSON.parse(JSON.stringify(order));
-                            return <OrderCard key={index} id={index} order={orderJson}/>
+                            return <OrderCard key={index} id={index} order={orderJson} user={user}/>
                         }
                     )
                 }

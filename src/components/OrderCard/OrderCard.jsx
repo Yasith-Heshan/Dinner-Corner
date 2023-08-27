@@ -1,8 +1,17 @@
 "use client"
 import styles from './OrderCard.module.css';
 import {pricesList} from "@/utils/priceList";
-import {universityList} from "@/utils/universityList";
-const OrderCard = ({order,id})=>{
+import {PLACES, STATUS} from "@/utils/constants";
+import {db} from '../../app/firebase'
+import {doc,updateDoc} from "firebase/firestore";
+import {useState} from "react";
+
+
+const OrderCard = ({order,id,user})=>{
+
+    const [mapUrl, setMapUrl] = useState('');
+
+
     const getTotal=(itemList)=>{
         let total = 0;
         itemList.split(',').map(
@@ -14,14 +23,54 @@ const OrderCard = ({order,id})=>{
         return total;
     }
 
+    const handleAccept = async ()=>{
+        const docRef = doc(db, 'orders', order.id);
+        await updateDoc(docRef,{
+            status:STATUS.accepted
+        });
+    }
+
+    const handleReject = async ()=>{
+        const docRef = doc(db, 'orders', order.id);
+        await updateDoc(docRef,{
+            status:STATUS.rejected
+        });
+    }
+
+    const handleUpdate = async ()=>{
+        console.log('clicked')
+        const docRef = doc(db, 'orders', order.id);
+        await updateDoc(docRef,{
+            mapUrl,
+        })
+        setMapUrl('');
+    }
+
 
 
     return(
         <div className={styles.orderCard}>
-            <h3 className={styles.orderName}>{id+1}) {order.name}</h3>
-            <p className={styles.orderPhone}>{order.email}</p>
+            <h3 className={styles.orderName}>{id+1}) {order.name} -&nbsp;
+            {
+                order.status===STATUS.accepted && (
+                    <div className={styles.orderStatusAccepted}>{order.status}</div>
+                )
+            }
+            {
+                order.status===STATUS.pending && (
+                    <div className={styles.orderStatusPending}>{order.status}</div>
+                )
+            }
+            {
+                order.status===STATUS.rejected && (
+                    <div className={styles.orderStatusRejected}>{order.status}</div>
+                )
+            }
+            </h3>
+            <p className={styles.orderEmail}>{order.email}</p>
             <p className={styles.orderPhone}>{order.phoneNumber}</p>
             <p className={styles.orderDate}>{order.orderDate}</p>
+            <p className={styles.orderSpecialNotes}>{order.specialNotes}</p>
             <ul className={styles.orderItems}>
                 {order.orderItems.split(",").map(
                     (id,index) => {
@@ -30,7 +79,69 @@ const OrderCard = ({order,id})=>{
                     }
                 )}
             </ul>
+
             <p className={styles.orderTotal}>මුළු මුදල: රු {getTotal(order.orderItems)}</p>
+            <br/>
+
+            {
+                order.place===PLACES.frontGate &&
+                (
+                    <div className={`${styles.placeContainer} ${styles.frontGate}`}>
+                        <p className={styles.orderPlace}>{order.place}</p>
+                    </div>
+                )
+            }
+            {
+                order.place===PLACES.backGate && (
+                    <div className={`${styles.placeContainer} ${styles.backGate}`}>
+                        <p className={styles.orderPlace}>{order.place}</p>
+                    </div>
+                )
+            }
+
+            {
+                order.place===PLACES.boardingPlace && order.mapUrl.length!==0 && (
+                    <div className={styles.showMapButtonContainer}>
+                        <div className={styles.button}>
+                            <a
+                                className={`${styles.button} ${styles.mapButton}`}
+                                href={order.mapUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Open Google Map
+                            </a>
+                        </div>
+                    </div>
+                )
+            }
+            <br/>
+
+            {
+                user.email===process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.place===PLACES.boardingPlace && (
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="mapUrl">Map Url:</label>
+                        <div className={styles.inputContainer}>
+                        <input className={styles.input} type="text" id="mapUrl" value={mapUrl}
+                               onChange={(e) => setMapUrl(e.target.value)} required/>
+                            <button className={`${styles.button} ${styles.update}`} onClick={handleUpdate}>Update</button>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                user.email===process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status===STATUS.pending && (
+                    <div className={styles.actionButtons}>
+                        <button className={`${styles.button} ${styles.accept}`} onClick={handleAccept}>
+                            ACCEPT
+                        </button>
+                        <button className={`${styles.button} ${styles.reject}`} onClick={handleReject}>
+                            REJECT
+                        </button>
+                    </div>
+                )
+            }
+
         </div>
     );
 }
