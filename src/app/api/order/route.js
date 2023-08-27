@@ -31,5 +31,6 @@ export const POST = async (request)=>{
         return new NextResponse(error.message, {
             status: 500,
         });
+
     }
 }
