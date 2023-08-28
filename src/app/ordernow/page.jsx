@@ -2,138 +2,219 @@
 import {useEffect, useState} from "react";
 import styles from './page.module.css'
 import {pricesList} from "@/utils/priceList";
-import axios from 'axios'
-import {universityList} from "@/utils/universityList";
+import {collection, addDoc, serverTimestamp, query, where, getCountFromServer} from 'firebase/firestore'
+import {db} from '../firebase'
+import {customerNameError, customerPhoneNumberError, customerPlaceError, emptyCartError} from "@/utils/errorMessages";
+import Spinner from "@/components/Spinner/Spinner";
+import {UserAuth} from "@/app/context/AuthContext";
+import {format, isAfter, parse} from "date-fns";
+import {PLACES, STATUS} from "@/utils/constants";
 
-import {format, isAfter,  parse} from "date-fns";
 
 const OrderNow = () => {
-    const [name, setName] = useState('');
+    const {user, googleSignIn} = UserAuth();
+    const [loading, setLoading] = useState(false);
+    const [name, setName] = useState(user ? user.displayName : '');
+    const [nameError, setNameError] = useState('');
+
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [university, setUniversity] = useState(0);
-    const [universityError, setUniversityError] = useState(false);
     const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
-    const [phoneNumberError, setPhoneNumberError] = useState(false);
+    const [phoneNumberError, setPhoneNumberError] = useState('');
+
+    const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+    const [dateError, setDateError] = useState('');
+
     const [mealId, setMealId] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [mealList, setMealList] = useState([]);
+    const [mealListError, setMealListError] = useState('');
+
+    const [place, setPlace] = useState('');
+    const [placeError, setPlaceError] = useState('');
+
+    const [specialNotes, setSpecialNotes] = useState('');
+
+    const [requestingOrder, setRequestingOrder] = useState(false);
+
     const [displaySuccess, setDisplaySuccess] = useState(false);
     const [displayError, setDisplayError] = useState(false);
     const [displayLate, setDisplayLate] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
-    const [orderLimitError , setOrderLimitError] = useState('');
+    const [orderLimitError, setOrderLimitError] = useState('');
     const maximumOrderLimit = 20;
-
 
     useEffect(() => {
         if (phoneNumber !== "" && !phoneNumberPattern.test(phoneNumber)) {
-            setPhoneNumberError(true);
+            setPhoneNumberError(customerPhoneNumberError);
         } else {
-            setPhoneNumberError(false);
+            setPhoneNumberError('');
         }
-    }, [phoneNumber]);
+
+        if (name.length !== 0) {
+            setNameError('');
+        }
+
+        if (mealList.length !== 0) {
+            setMealListError('');
+        }
 
 
-    const getUniversity = (universityId)=>{
-        const universityObj = universityList.filter(
-            (obj)=>(obj.id==universityId)
+    }, [phoneNumber, name, mealList]);
+    useEffect(() => {
+
+        if (user) {
+            setLoading(false);
+            setName(user.displayName)
+        }
+    }, [user]);
+
+    const handleSignIn = async () => {
+        try {
+            setLoading(true);
+            await googleSignIn();
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if (loading) {
+        return (
+            <div className={styles.container}>
+                <Spinner/>
+            </div>
         );
-        return universityObj[0].university;
+    }
+
+    if (!user && !loading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.loginContainer}>
+                    <h1>Please sign in to place an order</h1>
+
+                    <button className={styles.loginButton} onClick={handleSignIn}>
+                        <img className={styles.googleLogo} src={'/google-signin-button.png'} alt={'Google sign in'} width={50} height={50}/>
+                        Google Sign In
+                    </button>
+                </div>
+            </div>
+
+        );
     }
 
 
     const handleSubmit = async (e) => {
 
-        let text = "ඇනවුම ලබා දීම තහවුරු කරන්න.";
-        if (confirm(text) == true) {
 
-            e.preventDefault();
-            const orderItemsArray = mealList.map((meal) => `${meal.id}`);
-            const orderItems = orderItemsArray.join(',')
-            try {
-                setOrderLimitError(``)
-                const response = await axios.get(`/api/order/${university}`);
-                const selectedOrders = response.data.filter(
-                    (order) => {
-                        return order.orderDate === format(new Date(), 'dd-MM-yyyy')
-                    }
-                )
-                if (selectedOrders.length < maximumOrderLimit) {
-                    if (!phoneNumberError) {
-                        if (university === 0 || phoneNumber === '') {
-                            if (university === 0) {
-                                setUniversityError(true);
-                            }
-                            if (phoneNumber === '') {
-                                setPhoneNumberError(true);
-                            }
-                        } else {
-                            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 16:30`,'dd-MM-yyyy HH:mm',new Date())
-                            if(isAfter(new Date(), maximumOrderTime)){
-                                setDisplayLate(true);
-                                setTimeout(() => {
-                                    setDisplayLate(false)
-                                }, 3000);
-                            }
-                            else{
-                                setDisableOrder(true);
-                                const orderDate = format(new Date(), 'dd-MM-yyyy')
-                                const response = await axios.post(`/api/order`, {
-                                    name, phoneNumber, university, orderItems, orderDate
-                                });
+        if (name.length === 0) {
+            setNameError(customerNameError);
+            return;
+        }
 
-                                if (response.data === 'Order has been created') {
-                                    setDisplaySuccess(true);
-                                    setDisableOrder(false);
-                                    setName('');
-                                    setPhoneNumber('');
-                                    setUniversityError(false);
-                                    setUniversity(0);
-                                    setQuantity(1);
-                                    setMealId(0);
-                                    setMealList([]);
-                                    setTimeout(() => {
-                                        setDisplaySuccess(false);
-                                    }, 3000);
-                                } else {
-                                    setDisplayError(true);
-                                    setDisableOrder(false);
-                                    setTimeout(() => {
-                                        setDisplayError(false)
-                                    }, 3000);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    setOrderLimitError(`${getUniversity(university)} සඳහා උපරිම ඇනවුම් සීමාව ඉක්මවා ඇත.`)
-                    setDisplaySuccess(false);
-                    setDisableOrder(false);
-                    setName('');
-                    setPhoneNumber('');
-                    setQuantity(1);
-                    setMealId(0);
-                    setMealList([]);
+        if (phoneNumber.length === 0) {
+            setPhoneNumberError(customerPhoneNumberError);
+            return;
+        }
+
+        if (place.length === 0) {
+            setPlaceError(customerPlaceError);
+            return;
+        }
+
+        if (mealList.length === 0) {
+            setMealListError(emptyCartError);
+            return;
+        }
+
+        if (date === '') {
+            setDateError('වැරදි දිනයකි!')
+            return
+        }
+
+        if(date===format(new Date,'yyyy-MM-dd')){
+            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 16:30`,'dd-MM-yyyy HH:mm',new Date())
+            if(user.email!==process.env.NEXT_PUBLIC_ADMIN_EMAIL){
+                if(isAfter(new Date(), maximumOrderTime)){
+                    setDisplayLate(true);
+                    setTimeout(() => {
+                        setDisplayLate(false)
+                    }, 3000);
+                    return
                 }
-
-
-            } catch (error) {
-                setDisplayError(true);
-                setDisableOrder(false);
-                setTimeout(() => {
-                    setDisplayError(false)
-                }, 3000);
-                console.error(error);
             }
+        }
+
+        setDisableOrder(true);
+
+        try {
+            setRequestingOrder(true);
+            const q = query(collection(db, "orders"), where("orderDate", "==", date));
+            const querySnapshot = await getCountFromServer(q);
+            console.log(querySnapshot.data().count);
+            if (querySnapshot.data().count >= maximumOrderLimit) {
+                setDisableOrder(false);
+                setRequestingOrder(false);
+                setOrderLimitError(`කණගාටුයි, ${date} දිනය සඳහා උපරිම ඇනවුම් ධාරිතාව ඉක්මවා ඇත.`)
+                return
+            }
+            const idList = mealList.map((meal) => meal.id);
+            const docRef = await addDoc(collection(db, 'orders'),
+                {
+                    name,
+                    phoneNumber,
+                    email: user.email,
+                    orderItems: idList.join(','),
+                    orderDate: date,
+                    place,
+                    createdAt: serverTimestamp(),
+                    status: STATUS.pending,
+                    mapUrl: '',
+                    specialNotes,
+                }
+            );
+            postSuccessFunctions();
+
+
+        } catch (error) {
+            setDisplayError(true);
+            setTimeout(() => {
+                setDisplayError(false)
+            }, 5000)
+            setDisableOrder(false);
+            setRequestingOrder(false)
+            console.error(error);
         }
 
     };
 
     // return (
     //   <div className={styles.container}>
-    //       <h1 className={styles.heading}>අද(13/08/2023) දින මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
+    //       <h1 className={styles.heading}>අද(02/07/2023) සහ හෙට(03/07/2023) දින මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
     //   </div>
     // );
+    const postErrorFunctions = () => {
+
+    }
+    const postSuccessFunctions = () => {
+        setRequestingOrder(false);
+        setDisplaySuccess(true);
+        setTimeout(() => setDisplaySuccess(false), 5000)
+        setName('');
+        setPhoneNumber('');
+        setPhoneNumberError(false);
+        setPlace('');
+        setMealList([]);
+        setMealId(0);
+        setQuantity(1);
+        setDisplayError(false);
+        setDisplayLate(false);
+        setDisableOrder(false);
+        setOrderLimitError('');
+        setDisableOrder(false);
+        setDate(format(new Date(), 'yyyy-MM-dd'));
+        setDateError('');
+        setSpecialNotes('');
+    }
 
     return (
         <>
@@ -160,7 +241,8 @@ const OrderNow = () => {
                     displayLate && (
                         <div className={styles.errorMsg}>
                             <span className={styles.errorIcon}>&#10007;</span>
-                            <p>කණගාටුයි, නියමිත වේලාවට ප්‍රවාහනය කිරීමට අවශ්‍ය බැවින් 04:30 න් පසු ලැබෙන ඇනවුම් භාර ගනු නොලැබේ.</p>
+                            <p>කණගාටුයි, නියමිත වේලාවට ප්‍රවාහනය කිරීමට අවශ්‍ය බැවින් 04:30 න් පසු ලැබෙන ඇනවුම් භාර ගනු
+                                නොලැබේ.</p>
                         </div>
                     )
                 }
@@ -173,8 +255,9 @@ const OrderNow = () => {
                 }
 
                 {
-                    orderLimitError!=='' && (
+                    orderLimitError !== '' && (
                         <div className={styles.errorMsg}>
+                            <span className={styles.errorIcon}>&#10007;</span>
                             {orderLimitError}
                         </div>
                     )
@@ -185,6 +268,7 @@ const OrderNow = () => {
                         <label className={styles.label} htmlFor="name">පාරිභොගිකයාගේ නම:</label>
                         <input className={styles.input} type="text" id="name" value={name}
                                onChange={(e) => setName(e.target.value)} required/>
+                        {nameError.length !== 0 && <p className={styles.errorMessage}>{nameError}</p>}
                     </div>
 
                     <div className={styles.formGroup}>
@@ -198,28 +282,38 @@ const OrderNow = () => {
                             }
                             required
                         />
-                        {phoneNumberError && <p className={styles.errorMessage}>නිවැරදි දුරකතන අංකයක් ඇතුලත් කරන්න.</p>}
+                        {phoneNumberError.length !== 0 && <p className={styles.errorMessage}>{phoneNumberError}</p>}
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.label} htmlFor="university">විශ්ව විද්‍යාලය:</label>
-                        <select onChange={(e) => {
-                            if(e.target.value!==0){
-                                setUniversityError(false);
-                            }else{
-                                setUniversityError(true);
+                        <label className={styles.label} htmlFor="phoneNumber">ඇනයුම් කරන දිනය:</label>
+                        <input
+                            className={styles.input}
+                            type="date"
+                            id="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)
                             }
-                            setUniversity(e.target.value)
-                        }} className={styles.input} id="university" value={university}>
-                            <option value={0}></option>
-                            {universityList.map(
-                                (e, index) => (
-                                    <option value={e.id} key={index}>{e.university}</option>
+                            required
+                        />
+                        {dateError.length !== 0 && <p className={styles.errorMessage}>{dateError}</p>}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="qty">ස්ථානය:</label>
+                        <select onChange={(e) => {
+                            setPlace(e.target.value)
+                        }} className={styles.input} id="place" value={place}>
+                            {['', PLACES.frontGate, PLACES.backGate, PLACES.boardingPlace].map(
+                                (e) => (
+                                    <option value={e} key={e}>{e}</option>
                                 )
                             )}
                         </select>
-                        {universityError && <p className={styles.errorMessage}>විශ්ව විද්‍යාලය තෝරන්න.</p>}
+                        {placeError.length !== 0 && <p className={styles.errorMessage}>{placeError}</p>}
+                        {place==='Boarding Place' && <p className={styles.successMsg}>කරුණාකර ඇනවුම් කිරීමෙන් පසු ඔබේ නවාතැන්පල පිහිටි ස්ථානය 0714748483 අංකයට email address එක සමඟ whatsapp කරන්න.</p> }
                     </div>
+
 
                     <div className={styles.formGroup}>
                         <div className={styles.gridContainer}>
@@ -250,6 +344,8 @@ const OrderNow = () => {
                                         )
                                     )}
                                 </select>
+                                {mealListError.length !== 0 && <p className={styles.errorMessage}>{mealListError}</p>}
+
                             </div>
                             <div className={styles.column2}>
                                 <div className={styles.buttonContainer}>
@@ -311,11 +407,18 @@ const OrderNow = () => {
                     </div>
 
                     <br/>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="specialNotes">විශේෂ සටහන්:</label>
+                        <input className={styles.input} type="text" id="specialNotes" value={specialNotes}
+                               onChange={(e) => setSpecialNotes(e.target.value)} required/>
+                    </div>
                     <button disabled={disableOrder} onClick={handleSubmit} type="button"
-                            className={styles.submitButton}>ඇනවුම් කරන්න
+                            className={styles.submitButton}>
+                        {requestingOrder ? <Spinner/> : 'ඇනවුම් කරන්න'}
                     </button>
                 </form>
-            </div>)
+            </div>
+            )
         </>
 
     );

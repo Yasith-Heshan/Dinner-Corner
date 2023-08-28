@@ -234,6 +234,8 @@
     align-items: center;
     background-color: #ffcccc;
     padding: 10px;
+    font-weight: bold;
+    color: red;
     border-radius: 4px;
     margin-top: 15px;
 }
@@ -268,5 +270,23 @@
 .errorMessage {
     color: red;
     font-size: 12px;
+}
+
+.loginContainer{
+    text-align: center;
+    padding: 10px;
+}
+.loginButton{
+    margin-top: 25px;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
 }
 

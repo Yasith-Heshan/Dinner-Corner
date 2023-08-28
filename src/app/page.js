@@ -66,7 +66,7 @@ export default function Home() {
                             <td>{meal.price}</td>
                         </tr>
                     )
-                    )
+                )
                 }
 
 
