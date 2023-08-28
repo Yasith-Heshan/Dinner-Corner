@@ -18,12 +18,12 @@ const pages = [
     },
     {
         id: 3,
-        title: 'Login',
+        title: 'Google Sign IN',
         url: '#'
     },
     {
         id: 4,
-        title: 'Logout',
+        title: 'Sign Out',
         url: '#'
     }
 

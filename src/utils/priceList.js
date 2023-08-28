@@ -6,10 +6,12 @@ const size = {
 const mealType = {
     Veg: 'එළවළු කෑම',
     Egg: 'බිත්තර කෑම',
-    Omelet:'බිත්තර ඔම්ලට්',
+    Omelet:'ඔම්ලට්',
     Fish: 'මාළු කෑම',
     Chicken: 'කුකුල් මස් කෑම',
-    ChickenFriedRice: 'Chicken Fried Rice'
+    ChickenFriedRice: 'Chicken Fried Rice',
+    EggKottu:'Egg Kottu',
+    ChickenKottu: 'Chicken Kottu'
 }
 export const pricesList = [
     {
@@ -25,7 +27,7 @@ export const pricesList = [
         type:mealType.Veg,
         size:size.Full,
         enoughFor:2,
-        price:200,
+        price:230,
     },
 
     {
@@ -33,7 +35,7 @@ export const pricesList = [
         type:mealType.Egg,
         size:size.Small,
         enoughFor:1,
-        price:220,
+        price:250,
     },
 
     {
@@ -41,7 +43,7 @@ export const pricesList = [
         type:mealType.Egg,
         size:size.Full,
         enoughFor:2,
-        price:280,
+        price:300,
     },
 
     {
@@ -49,7 +51,7 @@ export const pricesList = [
         type:mealType.Omelet,
         size:size.Small,
         enoughFor:1,
-        price:220,
+        price:260,
     },
 
     {
@@ -57,7 +59,7 @@ export const pricesList = [
         type:mealType.Omelet,
         size:size.Full,
         enoughFor:2,
-        price:280,
+        price:320,
     },
 
     {
@@ -65,7 +67,7 @@ export const pricesList = [
         type:mealType.Fish,
         size:size.Small,
         enoughFor:1,
-        price:230,
+        price:260,
     },
 
     {
@@ -73,7 +75,7 @@ export const pricesList = [
         type:mealType.Fish,
         size:size.Full,
         enoughFor:2,
-        price:280,
+        price:320,
     },
 
     {
@@ -81,7 +83,7 @@ export const pricesList = [
         type:mealType.Chicken,
         size:size.Small,
         enoughFor:1,
-        price:260,
+        price:280,
     },
 
     {
@@ -89,21 +91,50 @@ export const pricesList = [
         type:mealType.Chicken,
         size:size.Full,
         enoughFor:2,
-        price:320,
+        price:350,
     },
     {
         id: 11,
         type:mealType.ChickenFriedRice,
         size:size.Small,
         enoughFor:1,
-        price:260,
+        price:280,
     },
     {
         id: 12,
         type:mealType.ChickenFriedRice,
         size:size.Full,
         enoughFor:2,
-        price:330,
+        price:350,
     },
+    {
+        id: 13,
+        type:mealType.EggKottu,
+        size:size.Small,
+        enoughFor:1,
+        price:350,
+    },
+    {
+        id: 14,
+        type:mealType.EggKottu,
+        size:size.Full,
+        enoughFor:2,
+        price:400,
+    },
+    {
+        id: 15,
+        type:mealType.ChickenKottu,
+        size:size.Small,
+        enoughFor:1,
+        price:450,
+    },
+    {
+        id: 16,
+        type:mealType.ChickenKottu,
+        size:size.Full,
+        enoughFor:2,
+        price:500,
+    },
+
 
 ]

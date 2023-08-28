@@ -7,7 +7,7 @@ import {db} from '../firebase'
 import {customerNameError, customerPhoneNumberError, customerPlaceError, emptyCartError} from "@/utils/errorMessages";
 import Spinner from "@/components/Spinner/Spinner";
 import {UserAuth} from "@/app/context/AuthContext";
-import {format} from "date-fns";
+import {format, isAfter, parse} from "date-fns";
 import {PLACES, STATUS} from "@/utils/constants";
 
 
@@ -91,7 +91,11 @@ const OrderNow = () => {
             <div className={styles.container}>
                 <div className={styles.loginContainer}>
                     <h1>Please sign in to place an order</h1>
-                    <button className={styles.loginButton} onClick={handleSignIn}>Login</button>
+
+                    <button className={styles.loginButton} onClick={handleSignIn}>
+                        <img className={styles.googleLogo} src={'/google-signin-button.png'} alt={'Google sign in'} width={50} height={50}/>
+                        Google Sign In
+                    </button>
                 </div>
             </div>
 
@@ -100,6 +104,7 @@ const OrderNow = () => {
 
 
     const handleSubmit = async (e) => {
+
 
         if (name.length === 0) {
             setNameError(customerNameError);
@@ -124,6 +129,19 @@ const OrderNow = () => {
         if (date === '') {
             setDateError('වැරදි දිනයකි!')
             return
+        }
+
+        if(date===format(new Date,'yyyy-MM-dd')){
+            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 16:30`,'dd-MM-yyyy HH:mm',new Date())
+            if(user.email!==process.env.NEXT_PUBLIC_ADMIN_EMAIL){
+                if(isAfter(new Date(), maximumOrderTime)){
+                    setDisplayLate(true);
+                    setTimeout(() => {
+                        setDisplayLate(false)
+                    }, 3000);
+                    return
+                }
+            }
         }
 
         setDisableOrder(true);

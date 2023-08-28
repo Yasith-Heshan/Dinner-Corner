@@ -6,13 +6,14 @@ import { getFirestore } from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+console.log(process.env.NEXT_PUBLIC_APP_ID)
 const firebaseConfig = {
-    apiKey: "AIzaSyAh1WM7VDE1MnXxBFohMfkP-b2mDZHPn1E",
-    authDomain: "dinnercorner-8558b.firebaseapp.com",
-    projectId: "dinnercorner-8558b",
-    storageBucket: "dinnercorner-8558b.appspot.com",
-    messagingSenderId: "815302849563",
-    appId: "1:815302849563:web:13fe07201699c6386c74be"
+    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_PROJETC_ID,
+    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_MESSAGE_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_APP_ID
 };
 
 // Initialize Firebase

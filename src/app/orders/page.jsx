@@ -9,6 +9,7 @@ import {db} from '../firebase'
 import {collection, getDocs, query, where,onSnapshot,orderBy} from "firebase/firestore";
 import {format} from "date-fns";
 import { useRouter } from 'next/navigation'
+import Locations from "@/components/Locations/Locations";
 
 
 
@@ -100,6 +101,12 @@ const AcceptedOrders = () => {
                     )
                 }
             </div>
+
+            {
+                user.email===process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+                    <Locations orders={orders}/>
+                )
+            }
 
         </>
     );
