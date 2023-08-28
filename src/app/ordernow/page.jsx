@@ -133,7 +133,7 @@ const OrderNow = () => {
         }
 
         if(date===format(new Date,'yyyy-MM-dd')){
-            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 23:59`,'dd-MM-yyyy HH:mm',new Date())
+            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 16:30`,'dd-MM-yyyy HH:mm',new Date())
             if(user.email!==process.env.NEXT_PUBLIC_ADMIN_EMAIL){
                 if(isAfter(new Date(), maximumOrderTime)){
                     setDisplayLate(true);

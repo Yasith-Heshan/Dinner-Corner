@@ -83,7 +83,7 @@ const AcceptedOrders = () => {
 
             <div>
                 {
-                    isLoading && <div className={styles.loadingMsg}><Spinner/></div>
+                    isLoading && <div className={styles.heading}><Spinner/></div>
                 }
                 {
                     error && <div className={styles.errorMsg}>{error}</div>
@@ -92,13 +92,18 @@ const AcceptedOrders = () => {
             </div>
 
             {
+                !company_emails.includes(user.email) &&
+                (<h2 className={styles.loadingMsg}>{format(new Date(), 'yyyy-MM-dd')} සදහා ඇනවුම්:</h2>)
+            }
+
+            {
                company_emails.includes(user.email) && (
-                    <Categorise orders={orders}/>
+                    <Categorise orders={orders.filter((order)=>{return !(order.status===STATUS.rejected||order.status===STATUS.canceled)})}/>
                 )
             }
             <div>
                 {
-                    orders && orders.map(
+                    orders && orders.filter((order)=>{return !(order.status===STATUS.rejected||order.status===STATUS.canceled)}).map(
                         (order,index)=>{
                             if(company_emails.includes(user.email)){
                                 if(!(order.status===STATUS.rejected || order.status===STATUS.canceled)){
