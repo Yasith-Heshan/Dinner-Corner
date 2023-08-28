@@ -15,7 +15,7 @@ import {STATUS} from "@/utils/constants";
 
 
 const AcceptedOrders = () => {
-    const {user,googleSignIn} = UserAuth();
+    const {user} = UserAuth();
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
