@@ -12,7 +12,7 @@ import {PLACES, STATUS} from "@/utils/constants";
 
 
 const OrderNow = () => {
-    const {user, googleSignIn} = UserAuth();
+    const {user, googleSignIn, googleSignInWithRedirect} = UserAuth();
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(user ? user.displayName : '');
     const [nameError, setNameError] = useState('');
@@ -71,7 +71,7 @@ const OrderNow = () => {
     const handleSignIn = async () => {
         try {
             setLoading(true);
-            await googleSignIn();
+            await googleSignInWithRedirect();
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -96,6 +96,8 @@ const OrderNow = () => {
                         <img className={styles.googleLogo} src={'/google-signin-button.png'} alt={'Google sign in'} width={50} height={50}/>
                         Google Sign In
                     </button>
+                    <br/>
+                    <p>(මේ සඳහා තත්පරයක් පමණ ගත වෙන බව කරුණාවෙන් සලකන්න.)</p>
                 </div>
             </div>
 

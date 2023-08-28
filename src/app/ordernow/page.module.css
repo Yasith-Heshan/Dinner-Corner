@@ -277,7 +277,7 @@
     padding: 10px;
 }
 .loginButton{
-    margin-top: 25px;
+    margin: 25px 0;
     display: inline-flex;
     align-items: center;
     padding: 10px 20px;
