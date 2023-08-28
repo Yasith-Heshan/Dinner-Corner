@@ -97,7 +97,6 @@ const OrderNow = () => {
                         Google Sign In
                     </button>
                     <br/>
-                    <p>(මේ සඳහා තත්පරයක් පමණ ගත වෙන බව කරුණාවෙන් සලකන්න.)</p>
                 </div>
             </div>
 
