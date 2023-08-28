@@ -13,7 +13,7 @@ const pages = [
     },
     {
         id: 2,
-        title: 'භාර දී ඇනවුම්',
+        title: 'භාර දී ඇති ඇනවුම්',
         url: '/orders',
     },
     {
