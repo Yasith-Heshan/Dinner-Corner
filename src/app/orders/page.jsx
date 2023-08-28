@@ -10,6 +10,7 @@ import {collection, getDocs, query, where,onSnapshot,orderBy} from "firebase/fir
 import {format} from "date-fns";
 import { useRouter } from 'next/navigation'
 import Locations from "@/components/Locations/Locations";
+import {STATUS} from "@/utils/constants";
 
 
 
@@ -95,8 +96,16 @@ const AcceptedOrders = () => {
                 {
                     orders && orders.map(
                         (order,index)=>{
-                            const orderJson = JSON.parse(JSON.stringify(order));
-                            return <OrderCard key={index} id={index} order={orderJson} user={user}/>
+                            if(company_emails.includes(user.email)){
+                                if(!(order.status===STATUS.rejected || order.status===STATUS.canceled)){
+                                    const orderJson = JSON.parse(JSON.stringify(order));
+                                    return <OrderCard key={index} id={index} order={orderJson} user={user}/>
+                                }
+                            }else{
+                                const orderJson = JSON.parse(JSON.stringify(order));
+                                return <OrderCard key={index} id={index} order={orderJson} user={user}/>
+                            }
+
                         }
                     )
                 }

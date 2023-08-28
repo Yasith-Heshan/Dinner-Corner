@@ -304,7 +304,7 @@ const OrderNow = () => {
                         <select onChange={(e) => {
                             setPlace(e.target.value)
                         }} className={styles.input} id="place" value={place}>
-                            {['', PLACES.frontGate, PLACES.backGate, PLACES.boardingPlace].map(
+                            {['', PLACES.frontGate, PLACES.backGate, PLACES.boardingPlace,PLACES.boysHostal01,PLACES.boysHostal02].map(
                                 (e) => (
                                     <option value={e} key={e}>{e}</option>
                                 )

@@ -94,6 +94,16 @@
     color: #fff;
 }
 
+.orderStatusCanceled {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #ffffff;
+    color: #ac2e2e;
+}
+
 .actionButtons {
     margin-top: 10px;
     font-size: 20px;
@@ -180,6 +190,12 @@
 }
 .backGate{
     background-color: #d9534f;
+}
+.boysHostal01{
+    background-color: #4fd9c4;
+}
+.boysHostal02{
+    background-color: #d47fff;
 }
 
 .showMapButtonContainer {
