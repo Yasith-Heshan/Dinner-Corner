@@ -64,7 +64,11 @@ const AcceptedOrders = () => {
             };
 
         }else{
-            router.push('/')
+            if(typeof window !==undefined){
+                if(!localStorage.getItem('user')){
+                    router.push('/')
+                }
+            }
         }
     }, [user]);
 
