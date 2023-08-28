@@ -43,7 +43,7 @@ const NavBar = () => {
     };
     const handleSignIn = async ()=>{
         try{
-            await googleSignInWithRedirect();
+            await googleSignIn();
         }catch (error){
             console.log(error);
         }

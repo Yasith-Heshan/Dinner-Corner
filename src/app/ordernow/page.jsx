@@ -71,7 +71,7 @@ const OrderNow = () => {
     const handleSignIn = async () => {
         try {
             setLoading(true);
-            await googleSignInWithRedirect();
+            await googleSignIn();
             setLoading(false);
         } catch (error) {
             console.log(error);
