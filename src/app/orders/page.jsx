@@ -20,7 +20,7 @@ const AcceptedOrders = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [customer, setCustomer] = useState(false);
-    const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL]
+    const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL,process.env.NEXT_PUBLIC_MANAGER_3_EMAIL]
     const router = useRouter()
 
 
