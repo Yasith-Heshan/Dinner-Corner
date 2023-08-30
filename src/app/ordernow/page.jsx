@@ -41,7 +41,7 @@ const OrderNow = () => {
     const [displayLate, setDisplayLate] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [orderLimitError, setOrderLimitError] = useState('');
-    const maximumOrderLimit = 20;
+    const maximumOrderLimit = 30;
 
     useEffect(() => {
         if (phoneNumber !== "" && !phoneNumberPattern.test(phoneNumber)) {
