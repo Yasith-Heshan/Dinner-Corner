@@ -117,6 +117,10 @@ const OrderNow = () => {
             return;
         }
 
+        if(phoneNumberError.length !== 0){
+            return;
+        }
+
         if (place.length === 0) {
             setPlaceError(customerPlaceError);
             return;
