@@ -88,7 +88,6 @@ const AcceptedOrders = () => {
                 {
                     error && <div className={styles.errorMsg}>{error}</div>
                 }
-
             </div>
 
             {
