@@ -216,11 +216,11 @@ const OrderNow = () => {
         setSpecialNotes('');
     }
 
-    return (
-      <div className={styles.container}>
-          <h1 className={styles.heading}>බොහෝ පිරිසක් නිවාස කරා ගොස් ඇති බැවින්, අවම ඇනවුම් ප්‍රමාණයක් ලැබීම නිසා  අද(28/09/2023) සිට 30/09/2023 දක්වා මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
-      </div>
-    );
+    // return (
+    //   <div className={styles.container}>
+    //       <h1 className={styles.heading}>බොහෝ පිරිසක් නිවාස කරා ගොස් ඇති බැවින්, අවම ඇනවුම් ප්‍රමාණයක් ලැබීම නිසා  අද(28/09/2023) සිට 30/09/2023 දක්වා මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
+    //   </div>
+    // );
 
 
     return (

@@ -19,30 +19,45 @@ const Categorise = ({orders})=>{
     );
 
 
-    // const ourList = Object.keys(itemCount).map(key => key).filter(
-    //     (id)=>{
-    //        return ![7,8,11,12].includes(parseInt(id));
-    //     }
-    // );
-    //
-    // const otherList = Object.keys(itemCount).map(key => key).filter(
-    //     (id)=>{
-    //         return [7,8,11,12].includes(parseInt(id));
-    //     }
-    // );
-
     const otherListItemIds = [7,8,11,12]
+    const normalRiceIds = [1,3,5,7,9,11]
+    const fullRiceIds = [2,4,6,8,10,12]
 
     const ourList = [];
     const otherList = [];
+    let renukaNormal = 0;
+    let renukaFull = 0;
+    let thiliniNormal = 0;
+    let thiliniFull = 0;
+
+
+    fullRiceIds.forEach(
+        (id)=>{
+            if(otherListItemIds.includes(id)){
+                thiliniFull += itemCount[id];
+            }else{
+                renukaFull += itemCount[id];
+            }
+        }
+    );
+
+    normalRiceIds.forEach(
+        (id)=>{
+            if(otherListItemIds.includes(id)){
+                thiliniNormal += itemCount[id];
+            }else{
+                renukaNormal += itemCount[id];
+            }
+        }
+    );
 
     Object.keys(itemCount).map(key => key).forEach(
         (id)=>{
-            const item = pricesList.find((item) => item.id === parseInt(id));
+            const selectedItem = pricesList.find((item) => item.id === parseInt(id));
             if(![7,8,11,12].includes(parseInt(id))){
-                ourList.push(itemCount[id]*item.price);
+                ourList.push(itemCount[id]*selectedItem.price);
             }else{
-                otherList.push(itemCount[id]*item.price)
+                otherList.push(itemCount[id]*selectedItem.price);
             }
         }
     );
@@ -55,9 +70,9 @@ const Categorise = ({orders})=>{
         return sum;
     }
 
-    console.log(itemCount);
-    console.log(ourList);
-    console.log(otherList);
+    // console.log(itemCount);
+    // console.log(ourList);
+    // console.log(otherList);
 
 
 
@@ -85,6 +100,14 @@ const Categorise = ({orders})=>{
             </table>
             <h3>Total for Renuka: රු. {getSum(ourList)}</h3>
             <h3>Total for Thilini: රු. {getSum(otherList)}</h3>
+            <br/>
+            <br/>
+            <h3>Renuka: Normal Rice Count: {renukaNormal}</h3>
+            <h3>Renuka: Full Rice Count: {renukaFull}</h3>
+            <br/>
+            <br/>
+            <h3>Thilini: Normal Rice Count: {thiliniNormal}</h3>
+            <h3>Thilini: Full Rice Count: {thiliniFull}</h3>
             <br/>
         </>
     )

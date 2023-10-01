@@ -6,7 +6,7 @@ import Categorise from "@/components/Categorise/Categorise";
 import {UserAuth} from "@/app/context/AuthContext";
 import Spinner from "@/components/Spinner/Spinner";
 import {db} from '../firebase'
-import {collection, getDocs, query, where,onSnapshot,orderBy} from "firebase/firestore";
+import {collection, getDocs, query, where,onSnapshot} from "firebase/firestore";
 import {format} from "date-fns";
 import { useRouter } from 'next/navigation'
 import Locations from "@/components/Locations/Locations";
