@@ -98,16 +98,16 @@ const Categorise = ({orders})=>{
                 }
                 </tbody>
             </table>
-            <h3>Total for Renuka: රු. {getSum(ourList)}</h3>
-            <h3>Total for Thilini: රු. {getSum(otherList)}</h3>
+            <h3>&nbsp;Total for Renuka: රු. {getSum(ourList)}</h3>
+            <h3>&nbsp;Total for Thilini: රු. {getSum(otherList)}</h3>
             <br/>
             <br/>
-            <h3>Renuka: Normal Rice Count: {renukaNormal}</h3>
-            <h3>Renuka: Full Rice Count: {renukaFull}</h3>
+            <h3>&nbsp;Renuka: Normal Rice Count: {renukaNormal}</h3>
+            <h3>&nbsp;Renuka: Full Rice Count: {renukaFull}</h3>
             <br/>
             <br/>
-            <h3>Thilini: Normal Rice Count: {thiliniNormal}</h3>
-            <h3>Thilini: Full Rice Count: {thiliniFull}</h3>
+            <h3>&nbsp;Thilini: Normal Rice Count: {thiliniNormal}</h3>
+            <h3>&nbsp;Thilini: Full Rice Count: {thiliniFull}</h3>
             <br/>
         </>
     )
