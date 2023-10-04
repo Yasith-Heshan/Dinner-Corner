@@ -104,6 +104,16 @@
     color: #ac2e2e;
 }
 
+.orderStatusDelivered {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #736c6c;
+    color: #e7dd27;
+}
+
 .actionButtons {
     margin-top: 10px;
     font-size: 20px;
@@ -131,6 +141,11 @@
 .reject {
     background-color: #d9534f;
     color: #fff;
+}
+
+.deliver{
+    background-color: #736c6c;
+    color: #e7dd27;
 }
 
 .formGroup {

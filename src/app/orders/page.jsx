@@ -7,10 +7,10 @@ import {UserAuth} from "@/app/context/AuthContext";
 import Spinner from "@/components/Spinner/Spinner";
 import {db} from '../firebase'
 import {collection, getDocs, query, where,onSnapshot} from "firebase/firestore";
-import {format} from "date-fns";
+import {format, subDays} from "date-fns";
 import { useRouter } from 'next/navigation'
 import Locations from "@/components/Locations/Locations";
-import {STATUS} from "@/utils/constants";
+import {company_emails, STATUS} from "@/utils/constants";
 
 
 
@@ -20,7 +20,6 @@ const AcceptedOrders = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [customer, setCustomer] = useState(false);
-    const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_MANAGER_2_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL,process.env.NEXT_PUBLIC_MANAGER_3_EMAIL]
     const router = useRouter()
 
 

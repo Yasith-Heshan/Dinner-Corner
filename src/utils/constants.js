@@ -3,6 +3,7 @@ export const STATUS = {
     pending:'PENDING',
     rejected:'REJECTED',
     canceled:'CANCELED',
+    delivered:'DELIVERED'
 }
 
 export const PLACES = {
@@ -12,3 +13,5 @@ export const PLACES = {
     boysHostal01: "Patuwaththa Hostal",
     boysHostal02: "New Boys Hostal"
 }
+
+export const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_MANAGER_2_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL,process.env.NEXT_PUBLIC_MANAGER_3_EMAIL]

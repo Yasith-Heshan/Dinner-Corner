@@ -1,8 +1,8 @@
 "use client"
 import styles from './OrderCard.module.css';
 import {pricesList} from "@/utils/priceList";
-import {PLACES, STATUS} from "@/utils/constants";
-import {db} from '../../app/firebase'
+import {company_emails, PLACES, STATUS} from "@/utils/constants";
+import {db} from '@/app/firebase'
 import {doc, updateDoc} from "firebase/firestore";
 import {useState} from "react";
 
@@ -44,8 +44,14 @@ const OrderCard = ({order, id, user}) => {
         });
     }
 
+    const handleDeliver = async () => {
+        const docRef = doc(db, 'orders', order.id);
+        await updateDoc(docRef, {
+            status: STATUS.delivered
+        });
+    }
+
     const handleUpdate = async () => {
-        console.log('clicked')
         const docRef = doc(db, 'orders', order.id);
         await updateDoc(docRef, {
             mapUrl,
@@ -75,6 +81,11 @@ const OrderCard = ({order, id, user}) => {
                 {
                     order.status === STATUS.canceled && (
                         <div className={styles.orderStatusCanceled}>{order.status}</div>
+                    )
+                }
+                {
+                    order.status === STATUS.delivered && (
+                        <div className={styles.orderStatusDelivered}>{order.status}</div>
                     )
                 }
             </h3>
@@ -163,6 +174,16 @@ const OrderCard = ({order, id, user}) => {
                         </button>
                         <button className={`${styles.button} ${styles.reject}`} onClick={handleReject}>
                             REJECT
+                        </button>
+                    </div>
+                )
+            }
+
+            {
+                company_emails.includes(user.email) && order.status === STATUS.accepted && (
+                    <div className={styles.actionButtons}>
+                        <button className={`${styles.button} ${styles.deliver}`} onClick={handleDeliver}>
+                            Order Delivered
                         </button>
                     </div>
                 )
