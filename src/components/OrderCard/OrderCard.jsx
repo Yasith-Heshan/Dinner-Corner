@@ -180,7 +180,7 @@ const OrderCard = ({order, id, user}) => {
             }
 
             {
-                company_emails.includes(user.email) && order.status === STATUS.accepted && (
+                company_emails.includes(user.email) && order.status !== STATUS.delivered && (
                     <div className={styles.actionButtons}>
                         <button className={`${styles.button} ${styles.deliver}`} onClick={handleDeliver}>
                             Complete Delivery
