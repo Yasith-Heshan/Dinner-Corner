@@ -183,7 +183,7 @@ const OrderCard = ({order, id, user}) => {
                 company_emails.includes(user.email) && order.status === STATUS.accepted && (
                     <div className={styles.actionButtons}>
                         <button className={`${styles.button} ${styles.deliver}`} onClick={handleDeliver}>
-                            Order Delivered
+                            Complete Delivery
                         </button>
                     </div>
                 )
