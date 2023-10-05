@@ -37,7 +37,7 @@ const Locations = ({orders})=>{
                 {
                     frontGateList.map(
                         (order)=>{
-                            return <li key={order.id}>{order.name} - {order.phoneNumber}</li>
+                            return <li key={order.id}>{order.name} - {order.phoneNumber} - {order.status}</li>
                         }
                     )
                 }
@@ -49,7 +49,7 @@ const Locations = ({orders})=>{
                 {
                     backGateList.map(
                         (order)=>{
-                            return <li key={order.id}>{order.name} - {order.phoneNumber}</li>
+                            return <li key={order.id}>{order.name} - {order.phoneNumber} - {order.status}</li>
                         }
                     )
                 }
@@ -61,7 +61,7 @@ const Locations = ({orders})=>{
                 {
                     boysHostal01.map(
                         (order)=>{
-                            return <li key={order.id}>{order.name} - {order.phoneNumber}</li>
+                            return <li key={order.id}>{order.name} - {order.phoneNumber} - {order.status}</li>
                         }
                     )
                 }
@@ -73,7 +73,7 @@ const Locations = ({orders})=>{
                 {
                     boysHostal02.map(
                         (order)=>{
-                            return <li key={order.id}>{order.name} - {order.phoneNumber}</li>
+                            return <li key={order.id}>{order.name} - {order.phoneNumber} - {order.status}</li>
                         }
                     )
                 }
@@ -85,7 +85,7 @@ const Locations = ({orders})=>{
                 {
                     boardingList.map(
                         (order)=>{
-                            return <li key={order.id}>{order.name} - {order.phoneNumber}</li>
+                            return <li key={order.id}>{order.name} - {order.phoneNumber} - {order.status}</li>
                         }
                     )
                 }
