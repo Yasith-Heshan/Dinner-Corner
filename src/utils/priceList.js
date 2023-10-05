@@ -86,20 +86,20 @@ export const pricesList = [
         price:280,
     },
 
-    // {
-    //     id: 10,
-    //     type:mealType.Chicken,
-    //     size:size.Full,
-    //     enoughFor:2,
-    //     price:350,
-    // },
-    // {
-    //     id: 11,
-    //     type:mealType.ChickenFriedRice,
-    //     size:size.Small,
-    //     enoughFor:1,
-    //     price:280,
-    // },
+    {
+        id: 10,
+        type:mealType.Chicken,
+        size:size.Full,
+        enoughFor:2,
+        price:350,
+    },
+    {
+        id: 11,
+        type:mealType.ChickenFriedRice,
+        size:size.Small,
+        enoughFor:1,
+        price:280,
+    },
     {
         id: 12,
         type:mealType.ChickenFriedRice,
