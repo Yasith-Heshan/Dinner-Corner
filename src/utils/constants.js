@@ -14,4 +14,4 @@ export const PLACES = {
     boysHostal02: "New Boys Hostal"
 }
 
-export const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_MANAGER_2_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL,process.env.NEXT_PUBLIC_MANAGER_3_EMAIL]
+export const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,process.env.NEXT_PUBLIC_MANAGER_2_EMAIL,process.env.NEXT_PUBLIC_ADMIN_EMAIL,process.env.NEXT_PUBLIC_MANAGER_3_EMAIL,process.env.NEXT_PUBLIC_MANAGER_4_EMAIL]
