@@ -18,7 +18,7 @@ const OrderNow = () => {
     const [nameError, setNameError] = useState('');
 
     const [phoneNumber, setPhoneNumber] = useState('');
-    const phoneNumberPattern = /^(0|\+94)(11|71|70|77|76|75|78)-?\d{7}$/;
+    const phoneNumberPattern = /^(0|\+94)(11|71|72|70|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState('');
 
     const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -41,6 +41,8 @@ const OrderNow = () => {
     const [displayLate, setDisplayLate] = useState(false);
     const [disableOrder, setDisableOrder] = useState(false);
     const [orderLimitError, setOrderLimitError] = useState('');
+
+
     const maximumOrderLimit = 60;
 
     useEffect(() => {
@@ -76,6 +78,10 @@ const OrderNow = () => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const handlePlace =  (e)=>{
+        setPlace(e.target.value);
     }
 
     if (loading) {
@@ -155,7 +161,6 @@ const OrderNow = () => {
             setRequestingOrder(true);
             const q = query(collection(db, "orders"), where("orderDate", "==", date));
             const querySnapshot = await getCountFromServer(q);
-            console.log(querySnapshot.data().count);
             if (querySnapshot.data().count >= maximumOrderLimit) {
                 setDisableOrder(false);
                 setRequestingOrder(false);
@@ -174,6 +179,7 @@ const OrderNow = () => {
                     createdAt: serverTimestamp(),
                     status: STATUS.pending,
                     mapUrl: '',
+                    rank:querySnapshot.data().count+1,
                     specialNotes,
                 }
             );
@@ -192,9 +198,6 @@ const OrderNow = () => {
 
     };
 
-    const postErrorFunctions = () => {
-
-    }
     const postSuccessFunctions = () => {
         setRequestingOrder(false);
         setDisplaySuccess(true);
@@ -293,7 +296,7 @@ const OrderNow = () => {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.label} htmlFor="phoneNumber">ඇනයුම් කරන දිනය:</label>
+                        <label className={styles.label} htmlFor="phoneNumber">ඇනවුම් කරන දිනය:</label>
                         <input
                             className={styles.input}
                             type="date"
@@ -309,9 +312,7 @@ const OrderNow = () => {
 
                     <div className={styles.formGroup}>
                         <label className={styles.label} htmlFor="qty">ස්ථානය:</label>
-                        <select onChange={(e) => {
-                            setPlace(e.target.value)
-                        }} className={styles.input} id="place" value={place}>
+                        <select onChange={handlePlace} className={styles.input} id="place" value={place}>
                             {['', PLACES.frontGate, PLACES.backGate, PLACES.boardingPlace,PLACES.boysHostal01,PLACES.boysHostal02].map(
                                 (e) => (
                                     <option value={e} key={e}>{e}</option>

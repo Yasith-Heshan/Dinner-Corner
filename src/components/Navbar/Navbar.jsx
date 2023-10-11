@@ -4,6 +4,7 @@ import styles from './Navbar.module.css'
 import {usePathname} from "next/navigation";
 import {UserAuth} from "@/app/context/AuthContext";
 import React, {useState} from "react";
+import {company_emails} from "@/utils/constants";
 
 const pages = [
     {
@@ -18,11 +19,16 @@ const pages = [
     },
     {
         id: 3,
+        title: 'Delivery Order',
+        url: '/delivery',
+    },
+    {
+        id: 4,
         title: 'Google Sign IN',
         url: '#'
     },
     {
-        id: 4,
+        id: 5,
         title: 'Sign Out',
         url: '#'
     }
@@ -75,13 +81,14 @@ const NavBar = () => {
                             return (
                                 <React.Fragment key={index}>
                                     {
-                                        page.id !== 2 && page.id !== 3 && page.id !== 4 &&
+                                        page.id !== 2 && page.id !== 3 && page.id !== 4 && page.id !== 5 &&
                                         (<li key={page.id}>
                                                 <Link className={isActive ? styles.activateLink : ''} href={page.url}>
                                                     {page.title}
                                                 </Link>
                                             </li>
-                                        )}
+                                        )
+                                    }
                                     {
                                         page.id === 2 && user && (
                                             <li key={page.id}>
@@ -92,7 +99,16 @@ const NavBar = () => {
                                         )
                                     }
                                     {
-                                        page.id === 3 && !user && (
+                                        page.id === 3 && user && company_emails.includes(user.email) && (
+                                            <li key={page.id}>
+                                                <Link className={isActive ? styles.activateLink : ''} href={page.url}>
+                                                    {page.title}
+                                                </Link>
+                                            </li>
+                                        )
+                                    }
+                                    {
+                                        page.id === 4 && !user && (
                                             <li key={page.id}>
                                                 <Link onClick={handleSignIn} className={isActive ? styles.activateLink : ''} href={page.url}>
                                                     {page.title}
@@ -101,7 +117,7 @@ const NavBar = () => {
                                         )
                                     }
                                     {
-                                        page.id === 4 &&  user &&(
+                                        page.id === 5 &&  user &&(
                                             <li key={page.id}>
                                                 <div className={styles.dropdown}>
                                                     <button className={styles['dropdown-toggle']} onClick={handleToggle}>

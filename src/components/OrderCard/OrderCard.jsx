@@ -5,12 +5,14 @@ import {company_emails, PLACES, STATUS} from "@/utils/constants";
 import {db} from '@/app/firebase'
 import {doc, updateDoc} from "firebase/firestore";
 import {useState} from "react";
+import {usePathname} from "next/navigation";
 
 
 const OrderCard = ({order, id, user}) => {
 
     const [mapUrl, setMapUrl] = useState('');
 
+    const pathname = usePathname();
 
     const getTotal = (itemList) => {
         let total = 0;
@@ -19,7 +21,7 @@ const OrderCard = ({order, id, user}) => {
                 const item = pricesList.find((item) => item.id === parseInt(id));
                 total += item.price
             }
-        )
+        );
         return total;
     }
 
@@ -57,6 +59,12 @@ const OrderCard = ({order, id, user}) => {
             mapUrl,
         })
         setMapUrl('');
+    }
+    const handleRank = async () => {
+        const docRef = doc(db, 'orders', order.id);
+        await updateDoc(docRef, {
+            rank,
+        })
     }
 
 
@@ -154,8 +162,9 @@ const OrderCard = ({order, id, user}) => {
             }
             <br/>
 
+
             {
-                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.place === PLACES.boardingPlace && (
+                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.place === PLACES.boardingPlace && pathname === '/orders' && (
                     <div className={styles.formGroup}>
                         <label className={styles.label} htmlFor="mapUrl">Map Url:</label>
                         <div className={styles.inputContainer}>
@@ -167,7 +176,7 @@ const OrderCard = ({order, id, user}) => {
                 )
             }
             {
-                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status === STATUS.pending && (
+                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status === STATUS.pending && pathname === '/orders' && (
                     <div className={styles.actionButtons}>
                         <button className={`${styles.button} ${styles.accept}`} onClick={handleAccept}>
                             ACCEPT
@@ -190,7 +199,7 @@ const OrderCard = ({order, id, user}) => {
             }
 
             {
-                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status === STATUS.accepted && (
+                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status === STATUS.accepted && pathname === '/orders' &&(
                     <div className={styles.actionButtons}>
                         <button className={`${styles.button} ${styles.reject}`} onClick={handleCancel}>
                             Cancel

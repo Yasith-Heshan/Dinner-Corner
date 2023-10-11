@@ -6,8 +6,8 @@ import Categorise from "@/components/Categorise/Categorise";
 import {UserAuth} from "@/app/context/AuthContext";
 import Spinner from "@/components/Spinner/Spinner";
 import {db} from '../firebase'
-import {collection, getDocs, query, where,onSnapshot} from "firebase/firestore";
-import {format, subDays} from "date-fns";
+import {collection, getDocs, doc, setDoc, query, where, onSnapshot, addDoc} from "firebase/firestore";
+import {format} from "date-fns";
 import { useRouter } from 'next/navigation'
 import Locations from "@/components/Locations/Locations";
 import {company_emails, STATUS} from "@/utils/constants";
@@ -19,8 +19,29 @@ const AcceptedOrders = () => {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [customer, setCustomer] = useState(false);
-    const router = useRouter()
+    const [deliveryOrder, setDeliveryOrder] = useState('');
+    const router = useRouter();
+
+    const handleDeliveryOrder =async (e) =>{
+        const date = format(new Date(),'yyyy-MM-dd')
+        const q = query(collection(db, "orderWithDate"), where("date", "==", date));
+
+        const querySnapshot = await getDocs(q);
+        let id = '';
+        querySnapshot.forEach((doc) => {
+            id = doc.id;
+        });
+        console.log(deliveryOrder)
+        if(id!==''){
+            const docRef = await doc(db, "orderWithDate", id);
+            await setDoc(docRef,{date,order:deliveryOrder});
+            setDeliveryOrder('');
+        }else{
+            await addDoc(collection(db,'orderWithDate'), {date,order:deliveryOrder});
+            setDeliveryOrder('');
+        }
+
+    }
 
 
     useEffect(() => {
@@ -121,6 +142,15 @@ const AcceptedOrders = () => {
             {
                 company_emails.includes(user.email) && (
                     <Locations orders={orders}/>
+                )
+            }
+            {
+                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+                    <div className={styles.inputContainer}>
+                        <input className={styles.input} type="text" id="deliveryOrder" value={deliveryOrder}
+                               onChange={(e) => setDeliveryOrder(e.target.value)} required/>
+                        <button className={`${styles.button} ${styles.update}`} onClick={handleDeliveryOrder}>Update</button>
+                    </div>  
                 )
             }
 

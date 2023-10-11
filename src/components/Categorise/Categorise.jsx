@@ -20,6 +20,7 @@ const Categorise = ({orders})=>{
 
 
     const otherListItemIds = [7,8,11,12]
+    // const otherListItemIds = [11,12]
     const normalRiceIds = [1,3,5,7,9,11]
     const fullRiceIds = [2,4,6,8,10,12]
 
@@ -54,7 +55,7 @@ const Categorise = ({orders})=>{
     Object.keys(itemCount).map(key => key).forEach(
         (id)=>{
             const selectedItem = pricesList.find((item) => item.id === parseInt(id));
-            if(![7,8,11,12].includes(parseInt(id))){
+            if(!otherListItemIds.includes(parseInt(id))){
                 ourList.push(itemCount[id]*selectedItem.price);
             }else{
                 otherList.push(itemCount[id]*selectedItem.price);

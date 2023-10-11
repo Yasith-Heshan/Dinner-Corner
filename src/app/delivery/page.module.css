@@ -76,26 +76,29 @@
     font-size: 20px;
 }
 
-.inputContainer{
-    display: grid;
-    grid-template-columns: 1fr auto; /* Distribute available space between input and button */
-    gap: 10px; /* Add some spacing between input and button */
-    align-items: center;
-    margin-bottom: 20px;
-    margin-left: 10px;
+.actionButtons {
+    margin: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    display: flex; /* Display buttons inline */
+    gap: 10px;
+    align-content: end;
+    justify-content: space-between;
 }
-
-.input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-
-}
-
-.update{
-    background-color: #4379de;
+.accept {
+    background-color: #5cb85c;
     color: #fff;
+}
+
+.reject {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.deliver{
+    background-color: #736c6c;
+    color: #e7dd27;
 }
 
 .button {
@@ -104,4 +107,5 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    width: 100px;
 }
