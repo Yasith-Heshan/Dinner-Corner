@@ -19,10 +19,13 @@ const Categorise = ({orders})=>{
     );
 
 
-    const otherListItemIds = [7,8,11,12]
+    const otherListItemIds = []
+    // const otherListItemIds = [7,8,11,12]
     // const otherListItemIds = [11,12]
-    const normalRiceIds = [1,3,5,7,9,11]
-    const fullRiceIds = [2,4,6,8,10,12]
+    const normalRiceIds = [1,3,5,7,9]
+    // const normalRiceIds = [1,3,5,7,9,11]
+    const fullRiceIds = [2,4,6,8,10]
+    // const fullRiceIds = [2,4,6,8,10,12]
 
     const ourList = [];
     const otherList = [];
