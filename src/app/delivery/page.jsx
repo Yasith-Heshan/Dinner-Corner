@@ -70,7 +70,7 @@ const EditRanks = () => {
             setOrders(tempOrders);
         }
 
-        if (user && user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+        if (user && company_emails.includes(user.email)) {
 
             setIsLoading(true);
 
@@ -115,7 +115,7 @@ const EditRanks = () => {
         return <></>
     }
 
-    console.log(orders)
+    // console.log(orders)
 
 
     return (
