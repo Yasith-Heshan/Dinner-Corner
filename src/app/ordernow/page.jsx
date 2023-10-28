@@ -219,11 +219,11 @@ const OrderNow = () => {
         setSpecialNotes('');
     }
 
-    // return (
-    //   <div className={styles.container}>
-    //       <h1 className={styles.heading}> අද(23/10/2023) මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
-    //   </div>
-    // );
+    return (
+      <div className={styles.container}>
+          <h1 className={styles.heading}> අද(28/10/2023) සහ හෙට (29/10/2023) මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
+      </div>
+    );
 
 
     return (
