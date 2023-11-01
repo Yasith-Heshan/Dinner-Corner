@@ -12,7 +12,7 @@ import {PLACES, STATUS} from "@/utils/constants";
 
 
 const OrderNow = () => {
-    const {user, googleSignIn, googleSignInWithRedirect} = UserAuth();
+    const {user, googleSignIn} = UserAuth();
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(user ? user.displayName : '');
     const [nameError, setNameError] = useState('');
