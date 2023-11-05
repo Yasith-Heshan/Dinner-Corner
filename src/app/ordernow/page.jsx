@@ -221,7 +221,7 @@ const OrderNow = () => {
 
     return (
       <div className={styles.container}>
-          <h1 className={styles.heading}> අද(4/11/2023)  මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
+          <h1 className={styles.heading}> අද(5/11/2023)  මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
       </div>
     );
 
