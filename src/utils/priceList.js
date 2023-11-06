@@ -111,27 +111,42 @@ export const pricesList = [
 
     {
         id: 13,
+        type:mealType.ChickenFriedRice,
+        size:size.Small,
+        enoughFor:1,
+        price:280,
+    },
+    {
+        id: 14,
+        type:mealType.ChickenFriedRice,
+        size:size.Full,
+        enoughFor:2,
+        price:350,
+    },
+
+    {
+        id: 15,
         type:mealType.EggKottu,
         size:size.Small,
         enoughFor:1,
         price:350,
     },
     {
-        id: 14,
+        id: 16,
         type:mealType.EggKottu,
         size:size.Full,
         enoughFor:2,
         price:400,
     },
     {
-        id: 15,
+        id: 17,
         type:mealType.ChickenKottu,
         size:size.Small,
         enoughFor:1,
         price:450,
     },
     {
-        id: 16,
+        id: 18,
         type:mealType.ChickenKottu,
         size:size.Full,
         enoughFor:2,
