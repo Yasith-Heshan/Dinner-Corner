@@ -18,7 +18,7 @@ const OrderNow = () => {
     const [nameError, setNameError] = useState('');
 
     const [phoneNumber, setPhoneNumber] = useState('');
-    const phoneNumberPattern = /^(0|\+94)(11|71|72|70|77|76|75|78)-?\d{7}$/;
+    const phoneNumberPattern = /^(0|\+94)(11|71|72|70|74|77|76|75|78)-?\d{7}$/;
     const [phoneNumberError, setPhoneNumberError] = useState('');
 
     const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
