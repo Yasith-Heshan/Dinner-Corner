@@ -19,8 +19,8 @@ const Categorise = ({orders})=>{
     );
 
 
-    const otherListItemIds = []
-    // const otherListItemIds = [7,8,11,12,13,14]
+    // const otherListItemIds = []
+    const otherListItemIds = [13,14]
     // const otherListItemIds = [11,12]
     // const normalRiceIds = [1,3,5,7,9]
     const normalRiceIds = [1,3,5,7,9,11,13]
