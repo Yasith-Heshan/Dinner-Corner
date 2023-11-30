@@ -9,7 +9,7 @@ const mealType = {
     Omelet:'ඔම්ලට්',
     Fish: 'මාළු කෑම',
     Chicken: 'කුකුල් මස් කෑම',
-    ChickenFriedRice: 'Chicken Fried Rice',
+    ChickenFriedRice: 'කහබත්(Bullseye)',
     YellowRice:'කහබත්(Chicken)',
     EggKottu:'Egg Kottu',
     ChickenKottu: 'Chicken Kottu'
@@ -94,36 +94,35 @@ export const pricesList = [
         enoughFor:2,
         price:350,
     },
+
     {
         id: 11,
-        type:mealType.YellowRice,
+        type:mealType.ChickenFriedRice,
         size:size.Small,
         enoughFor:1,
-        price:280,
+        price:260,
     },
     {
         id: 12,
-        type:mealType.YellowRice,
+        type:mealType.ChickenFriedRice,
         size:size.Full,
         enoughFor:2,
-        price:350,
+        price:330,
     },
-
     {
         id: 13,
-        type:mealType.ChickenFriedRice,
+        type:mealType.YellowRice,
         size:size.Small,
         enoughFor:1,
         price:280,
     },
     {
         id: 14,
-        type:mealType.ChickenFriedRice,
+        type:mealType.YellowRice,
         size:size.Full,
         enoughFor:2,
         price:350,
     },
-
     {
         id: 15,
         type:mealType.EggKottu,
