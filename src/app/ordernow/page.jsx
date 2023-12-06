@@ -219,11 +219,11 @@ const OrderNow = () => {
         setSpecialNotes('');
     }
 
-    // return (
-    //   <div className={styles.container}>
-    //       <h1 className={styles.heading}> අද(25/11/2023) සහ හෙට(26/11/2023)  මෙම සේවාව ක්‍රියාත්මක නොවේ.</h1>
-    //   </div>
-    // );
+    return (
+      <div className={styles.container}>
+          <h1 className={styles.heading}> අවම සිසුන් ප්‍රමාණයක් විශ්ව විද්‍යාලය තුල සිටින බැවින්, මේදිනවල මෙම සේවාව ක්‍රියාත්මක නොවේ. ඇනවුම් 10කට වැඩි ප්‍රමාණයක් ඇත්නම් 0714748483 අංකයට දැනුම් දෙන්න.</h1>
+      </div>
+    );
 
 
     return (
