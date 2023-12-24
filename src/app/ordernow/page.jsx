@@ -8,7 +8,7 @@ import {customerNameError, customerPhoneNumberError, customerPlaceError, emptyCa
 import Spinner from "@/components/Spinner/Spinner";
 import {UserAuth} from "@/app/context/AuthContext";
 import {format, isAfter, parse} from "date-fns";
-import {PLACES, STATUS} from "@/utils/constants";
+import {DEADLINE, PLACES, STATUS} from "@/utils/constants";
 
 
 const OrderNow = () => {
@@ -143,7 +143,7 @@ const OrderNow = () => {
         }
 
         if(date===format(new Date,'yyyy-MM-dd')){
-            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} 15:30`,'dd-MM-yyyy HH:mm',new Date())
+            const maximumOrderTime = parse(`${format(new Date(), 'dd-MM-yyyy')} ${DEADLINE}`,'dd-MM-yyyy HH:mm',new Date())
             if(user.email!==process.env.NEXT_PUBLIC_ADMIN_EMAIL){
                 if(isAfter(new Date(), maximumOrderTime)){
                     setDisplayLate(true);

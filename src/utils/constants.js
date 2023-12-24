@@ -19,3 +19,5 @@ export const company_emails = [process.env.NEXT_PUBLIC_MANAGER_1_EMAIL,
     process.env.NEXT_PUBLIC_ADMIN_EMAIL,
     process.env.NEXT_PUBLIC_MANAGER_3_EMAIL,
     process.env.NEXT_PUBLIC_MANAGER_4_EMAIL]
+
+export const DEADLINE = '15:30'

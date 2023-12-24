@@ -1,0 +1,17 @@
+.details{
+    @apply flex justify-center items-start;
+}
+
+.priceTable{
+    @apply flex justify-center items-start;
+}
+
+.special{
+    @apply text-red-500;
+    @apply font-bold;
+}
+
+.contentLink{
+    @apply text-blue-500;
+    @apply font-bold
+}
