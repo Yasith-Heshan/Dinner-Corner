@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import Locations from '@/components/Locations/Locations';
 import { company_emails, STATUS } from '@/utils/constants';
 import { fetchOrders, getQuery } from '@/utils/firebaseFunctions';
+import {toast} from "sonner";
+import {ORDER_FETCHING_ERROR} from "@/utils/errorMessages";
 
 const AcceptedOrders = () => {
   const { user } = UserAuth();
@@ -25,7 +27,12 @@ const AcceptedOrders = () => {
         snapshot.docChanges().forEach(() => {
           fetchOrders(user).then((orders) => {
             setOrders(orders);
-          });
+          }).catch(
+              (e)=>{
+                console.error(e);
+                toast.error(ORDER_FETCHING_ERROR);
+              }
+          );
         });
         setIsLoading(false);
       });

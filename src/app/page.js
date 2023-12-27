@@ -49,8 +49,7 @@ export default function Home() {
                 </li>
                 <li>
                   <span className={'special'}>
-                    අවශ්‍ය නම් නවාතැන්පොළට වුවද ප්‍රවාහන ගාස්තුවකින් තොරව ප්‍රවාහනය කිරීමට හැකි අතර
-                    එසේ අවශ්‍ය නම් ඔබට ඒ බව අප ලබා දෙන දුරකතන ඇමතුමේ දී ඉල්ලුම් කල හැක.
+                    අවශ්‍ය නම් නවාතැන්පොළට වුවද ප්‍රවාහන ගාස්තුවකින් තොරව ප්‍රවාහනය කිරීමට හැක.
                   </span>
                 </li>
                 <li>
@@ -62,7 +61,7 @@ export default function Home() {
               </ul>
             </div>
             <div className='priceTable pt-10'>
-              <div className='relative overflow-x-auto shadow-md sm:rounded-lg w-full'>
+              <div className='relative overflow-x-auto shadow-lg sm:rounded-lg w-full shadow-green-400'>
                 <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-40'>
                   <thead
                     className={

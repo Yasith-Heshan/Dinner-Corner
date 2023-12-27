@@ -9,7 +9,7 @@ import { array, boolean, date, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { format, isAfter, parse, subDays } from 'date-fns';
 import { UserAuth } from '@/app/context/AuthContext';
-import { LATEORDERERROR, OREDERLIMITEXCEEDEDERROR } from '@/utils/errorMessages';
+import { LATE_ORDER_ERROR, ORDER_LIMIT_EXCEEDED_ERROR } from '@/utils/errorMessages';
 import { fetchShopStatus, getOrderCount, saveOrder } from '@/utils/firebaseFunctions';
 import { useRouter } from 'next/navigation';
 import { ORDERS } from '@/utils/routes';
@@ -232,7 +232,7 @@ const OrderNow = () => {
                           'w-full h-10 rounded-lg mb-5 text-red-500 font-bold text-center bg-red-50 p-1 flex justify-center items-center'
                         }
                       >
-                        {OREDERLIMITEXCEEDEDERROR(new Date(getValues('date')).toLocaleDateString())}
+                        {ORDER_LIMIT_EXCEEDED_ERROR(new Date(getValues('date')).toLocaleDateString())}
                       </div>
                     )}
 
@@ -242,7 +242,7 @@ const OrderNow = () => {
                           'w-full h-10 rounded-lg mb-5 text-red-500 font-bold text-center bg-red-50 p-1 flex justify-center items-center'
                         }
                       >
-                        {LATEORDERERROR}
+                        {LATE_ORDER_ERROR}
                       </div>
                     )}
 
