@@ -93,14 +93,14 @@ export const handleDeliver = async (order) => {
 };
 
 export const handleShopOpen = async (open) => {
-  const docRef = doc(db, 'shopOpen', process.env.SHOP_OPEN_DOCUMENT_ID);
+  const docRef = doc(db, 'shopOpen', process.env.NEXT_PUBLIC_SHOP_OPEN_DOCUMENT_ID);
   await updateDoc(docRef, {
     shopOpen: open,
   });
 };
 
 export const fetchShopStatus = async () => {
-  const docRef = doc(db, 'shopOpen', process.env.SHOP_OPEN_DOCUMENT_ID);
+  const docRef = doc(db, 'shopOpen', process.env.NEXT_PUBLIC_SHOP_OPEN_DOCUMENT_ID);
   const documentSnapshot = await getDoc(docRef);
   return documentSnapshot.data();
 };
