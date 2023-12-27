@@ -1,120 +1,141 @@
-import {pricesList} from "@/utils/priceList";
-import styles from './Categorise.module.css'
+import { pricesList } from '@/utils/priceList';
+import { KOTTULIST, PARTNERLIST } from '@/utils/constants';
 
-const Categorise = ({orders})=>{
+const Categorise = ({ orders }) => {
+  const partner1 = {
+    small: 0,
+    full: 0,
+  };
+  const partner2 = {
+    small: 0,
+    full: 0,
+  };
+  const foodCounts = {};
+  pricesList.forEach((item) => {
+    foodCounts[item.id] = 0;
+  });
+  orders.forEach((order) => {
+    order.itemList.forEach((item) => {
+      //increment respective food item count
+      foodCounts[item.id] += 1;
 
-    const itemCount = pricesList.reduce((result, item) => {
-        result[item.id] = 0;
-        return result;
-    }, {});
+      //increment rice count
+      if (!KOTTULIST.includes(item.id)) {
+        if (PARTNERLIST.includes(item.id)) {
+          if (item.id % 2 === 0) {
+            partner2.full += 1;
+          } else {
+            partner2.small += 1;
+          }
+        } else {
+          if (item.id % 2 === 0) {
+            partner1.full += 1;
+          } else {
+            partner1.small += 1;
+          }
+        }
+      }
+    });
+  });
 
-    orders.forEach(
-        (order)=>{
-            order.orderItems.split(',').forEach(
-                (item)=>{
-                    itemCount[item]+=1
+  return (
+    <div className={'relative overflow-x-auto shadow-md sm:rounded-lg my-5'}>
+      <table className={'w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'}>
+        <thead
+          className={
+            'text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'
+          }
+        >
+          <tr>
+            <th className={'px-6 py-3'}>ආහාර වර්ගය</th>
+            <th className={'px-6 py-3'}>ප්‍රමාණය</th>
+            <th className={'px-6 py-3'}>එකක මිල</th>
+            <th className={'px-6 py-3'}>ඇනවුම් ගණන</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pricesList.map((food, index) => {
+            return (
+              <tr
+                className={
+                  'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
                 }
-            )
-        }
-    );
-
-
-    // const otherListItemIds = []
-    const otherListItemIds = [11,12,13,14]
-    // const otherListItemIds = [11,12]
-    // const normalRiceIds = [1,3,5,7,9]
-    const normalRiceIds = [1,3,5,7,9,11,13]
-    // const fullRiceIds = [2,4,6,8,10]
-    const fullRiceIds = [2,4,6,8,10,12,14]
-
-    const ourList = [];
-    const otherList = [];
-    let renukaNormal = 0;
-    let renukaFull = 0;
-    let thiliniNormal = 0;
-    let thiliniFull = 0;
-
-
-    fullRiceIds.forEach(
-        (id)=>{
-            if(otherListItemIds.includes(id)){
-                thiliniFull += itemCount[id];
-            }else{
-                renukaFull += itemCount[id];
-            }
-        }
-    );
-
-    normalRiceIds.forEach(
-        (id)=>{
-            if(otherListItemIds.includes(id)){
-                thiliniNormal += itemCount[id];
-            }else{
-                renukaNormal += itemCount[id];
-            }
-        }
-    );
-
-    Object.keys(itemCount).map(key => key).forEach(
-        (id)=>{
-            const selectedItem = pricesList.find((item) => item.id === parseInt(id));
-            if(!otherListItemIds.includes(parseInt(id))){
-                ourList.push(itemCount[id]*selectedItem.price);
-            }else{
-                otherList.push(itemCount[id]*selectedItem.price);
-            }
-        }
-    );
-
-    function getSum(arr) {
-        let sum = 0;
-        for (let i = 0; i < arr.length; i++) {
-            sum += arr[i];
-        }
-        return sum;
-    }
-
-    // console.log(itemCount);
-    // console.log(ourList);
-    // console.log(otherList);
-
-
-
-    return (
-        <>
-            <h1>අද දින සඳහා සාරාංශය:</h1>
-            <table className={styles.table}>
-                <tbody>
-                {
-                    Object.keys(itemCount).map(
-                        (id,index)=>{
-                            const item = pricesList.find((item) => item.id === parseInt(id));
-                            return(
-                                <tr key={index}>
-                                    <td>{item.type}</td>
-                                    <td>{item.size}</td>
-                                    <td>එකක් රු. {item.price}/=</td>
-                                    <td>{itemCount[id]}</td>
-                                </tr>
-                                );
-                        }
-                    )
-                }
-                </tbody>
+                key={index}
+              >
+                <td
+                  className={
+                    'px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
+                  }
+                >
+                  {food.type}
+                </td>
+                <td className={'px-6 py-4'}>{food.size}</td>
+                <td className={'px-6 py-4'}>{food.price}</td>
+                <td className={'px-6 py-4'}>{foodCounts[food.id]}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className={'sm:grid sm:grid-cols-2 gap-10'}>
+        <div className={'bg-amber-700 rounded-lg p-5 mt-5'}>
+          <p className={'text-center text-xl font-bold'}>Renuka</p>
+          <div className={'relative overflow-x-auto shadow-md sm:rounded-lg'}>
+            <table
+              className={'w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'}
+            >
+              <tbody>
+                <tr
+                  className={
+                    'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
+                  }
+                >
+                  <td className={'px-6 py-3'}>Small Rice</td>
+                  <td className={'px-6 py-3'}>{partner1.small}</td>
+                </tr>
+                <tr
+                  className={
+                    'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
+                  }
+                >
+                  <td className={'px-6 py-3'}>Full Rice</td>
+                  <td className={'px-6 py-3'}>{partner1.full}</td>
+                </tr>
+              </tbody>
             </table>
-            <h3>&nbsp;Total for Renuka: රු. {getSum(ourList)}</h3>
-            <h3>&nbsp;Total for Thilini: රු. {getSum(otherList)}</h3>
-            <br/>
-            <br/>
-            <h3>&nbsp;Renuka: Normal Rice Count: {renukaNormal}</h3>
-            <h3>&nbsp;Renuka: Full Rice Count: {renukaFull}</h3>
-            <br/>
-            <br/>
-            <h3>&nbsp;Thilini: Normal Rice Count: {thiliniNormal}</h3>
-            <h3>&nbsp;Thilini: Full Rice Count: {thiliniFull}</h3>
-            <br/>
-        </>
-    )
-}
+          </div>
+        </div>
+
+        <div className={'bg-green-700 rounded-lg p-5 mt-5'}>
+          <p className={'text-center text-xl font-bold'}>Thilini</p>
+          <div className={'relative overflow-x-auto shadow-md sm:rounded-lg'}>
+            <table
+              className={'w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'}
+            >
+              <tbody>
+                <tr
+                  className={
+                    'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
+                  }
+                >
+                  <td className={'px-6 py-3'}>Small Rice</td>
+                  <td className={'px-6 py-3'}>{partner2.small}</td>
+                </tr>
+                <tr
+                  className={
+                    'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
+                  }
+                >
+                  <td className={'px-6 py-3'}>Full Rice</td>
+                  <td className={'px-6 py-3'}>{partner2.full}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Categorise;

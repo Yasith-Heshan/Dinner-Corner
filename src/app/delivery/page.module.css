@@ -1,111 +1,111 @@
 .loadingMsg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
-.heading{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 /* Error Message */
 .errorMsg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
 }
 
 /* Error Icon */
 .errorIcon {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 /* Error Message Text */
 .errorText {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .dropdownContainer {
-    position: relative;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 10px;
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .dropdownLabel {
-    display: block;
-    font-size: 16px;
-    margin-bottom: 10px;
+  display: block;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 .dropdown {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 /* Media queries for responsive styles */
 
 @media (max-width: 768px) {
-    .dropdownLabel {
-        font-size: 14px;
-    }
+  .dropdownLabel {
+    font-size: 14px;
+  }
 
-    .dropdown {
-        font-size: 14px;
-    }
+  .dropdown {
+    font-size: 14px;
+  }
 }
 
-.option{
-    font-size: 20px;
+.option {
+  font-size: 20px;
 }
 
 .actionButtons {
-    margin: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: right;
-    display: flex; /* Display buttons inline */
-    gap: 10px;
-    align-content: end;
-    justify-content: space-between;
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: right;
+  display: flex; /* Display buttons inline */
+  gap: 10px;
+  align-content: end;
+  justify-content: space-between;
 }
 .accept {
-    background-color: #5cb85c;
-    color: #fff;
+  background-color: #5cb85c;
+  color: #fff;
 }
 
 .reject {
-    background-color: #d9534f;
-    color: #fff;
+  background-color: #d9534f;
+  color: #fff;
 }
 
-.deliver{
-    background-color: #736c6c;
-    color: #e7dd27;
+.deliver {
+  background-color: #736c6c;
+  color: #e7dd27;
 }
 
 .button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100px;
 }

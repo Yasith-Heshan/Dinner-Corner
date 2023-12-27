@@ -1,0 +1,15 @@
+.pending {
+  @apply inline-block px-2 py-1 rounded-lg font-bold uppercase bg-yellow-600 text-white;
+}
+.accepted {
+  @apply inline-block px-2 py-1 rounded-md font-bold uppercase bg-green-500 text-white;
+}
+.rejected {
+  @apply inline-block px-2 py-1 rounded-md font-bold uppercase bg-red-500 text-white;
+}
+.cancelled {
+  @apply inline-block px-2 py-1 rounded-md font-bold uppercase bg-white text-red-700;
+}
+.delivered {
+  @apply inline-block px-2 py-1 rounded-md font-bold uppercase bg-gray-700 text-yellow-400;
+}

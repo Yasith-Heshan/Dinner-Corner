@@ -1,216 +1,165 @@
-"use client"
-import styles from './OrderCard.module.css';
-import {pricesList} from "@/utils/priceList";
-import {company_emails, PLACES, STATUS} from "@/utils/constants";
-import {db} from '@/app/firebase'
-import {doc, updateDoc} from "firebase/firestore";
-import {useState} from "react";
-import {usePathname} from "next/navigation";
+'use client';
+import './style.css';
+import { useEffect, useState } from 'react';
+import { company_emails, GRAVYNOTE, STATUS } from '@/utils/constants';
+import { handleAccept, handleCancel, handleDeliver, handleReject } from '@/utils/firebaseFunctions';
+import { getLocationColor } from '@/utils/supportFuncitons';
+import { usePathname } from 'next/navigation';
+import { DELIVERYORDER } from '@/utils/routes';
 
-
-const OrderCard = ({order, id, user}) => {
-
-    const [mapUrl, setMapUrl] = useState('');
-
-    const pathname = usePathname();
-
-    const getTotal = (itemList) => {
-        let total = 0;
-        itemList.split(',').map(
-            (id) => {
-                const item = pricesList.find((item) => item.id === parseInt(id));
-                total += item.price
-            }
-        );
-        return total;
+const OrderCard = ({ order, user }) => {
+  const [orderStateClass, setOrderStateClass] = useState('pending');
+  const pathname = usePathname();
+  useEffect(() => {
+    switch (order.status) {
+      case STATUS.pending:
+        setOrderStateClass('pending');
+        break;
+      case STATUS.accepted:
+        setOrderStateClass('accepted');
+        break;
+      case STATUS.rejected:
+        setOrderStateClass('rejected');
+        break;
+      case STATUS.canceled:
+        setOrderStateClass('cancelled');
+        break;
+      case STATUS.delivered:
+        setOrderStateClass('delivered');
+        break;
     }
+  }, [order]);
 
-    const handleAccept = async () => {
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            status: STATUS.accepted
-        });
-    }
+  const calculateTotal = (itemList) => {
+    let total = 0;
+    itemList.forEach((item) => {
+      total += item.price;
+    });
+    return total;
+  };
 
-    const handleReject = async () => {
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            status: STATUS.rejected
-        });
-    }
+  return (
+    <div
+      className={
+        'w-full min-h-40 bg-gray-300 text-black shadow-xl shadow-green-400 rounded-lg mb-5 p-5'
+      }
+    >
+      <h1 className={'text-2xl font-bold'}>
+        {order.name} - <span className={orderStateClass}>{order.status}</span>
+      </h1>
+      <div
+        className={`w-full ${getLocationColor(
+          order,
+        )} p-2 rounded-lg font-bold text-center text-xl mt-2`}
+      >
+        {order.location}
+      </div>
 
-    const handleCancel = async () => {
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            status: STATUS.canceled
-        });
-    }
+      <div className={'my-4'}>
+        <p className={'text-gray-700 font-semibold text-xl'}>{order.phoneNumber}</p>
+        {company_emails.includes(user.email) && (
+          <div className={'flex justify-start items-center gap-1'}>
+            <a
+              target={'_blank'}
+              href={`tel:${order.phoneNumber}`}
+              className={'bg-gray-700 text-white rounded-lg p-2'}
+            >
+              Normal Call
+            </a>
+            <a
+              target={'_blank'}
+              href={`https://wa.me/${order.phoneNumber}`}
+              className={'bg-green-500 text-white rounded-lg p-2'}
+            >
+              WhatsApp Call
+            </a>
+          </div>
+        )}
+      </div>
 
-    const handleDeliver = async () => {
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            status: STATUS.delivered
-        });
-    }
-
-    const handleUpdate = async () => {
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            mapUrl,
-        })
-        setMapUrl('');
-    }
-    const handleRank = async () => {
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            rank,
-        })
-    }
-
-
-    return (
-        <div className={styles.orderCard}>
-            <h3 className={styles.orderName}>{id + 1}) {order.name} -&nbsp;
-                {
-                    order.status === STATUS.accepted && (
-                        <div className={styles.orderStatusAccepted}>{order.status}</div>
-                    )
-                }
-                {
-                    order.status === STATUS.pending && (
-                        <div className={styles.orderStatusPending}>{order.status}</div>
-                    )
-                }
-                {
-                    order.status === STATUS.rejected && (
-                        <div className={styles.orderStatusRejected}>{order.status}</div>
-                    )
-                }
-                {
-                    order.status === STATUS.canceled && (
-                        <div className={styles.orderStatusCanceled}>{order.status}</div>
-                    )
-                }
-                {
-                    order.status === STATUS.delivered && (
-                        <div className={styles.orderStatusDelivered}>{order.status}</div>
-                    )
-                }
-            </h3>
-            <p className={styles.orderEmail}>{order.email}</p>
-            <p className={styles.orderPhone}>{order.phoneNumber}</p>
-            <p className={styles.orderDate}>{order.orderDate}</p>
-            <p className={styles.orderSpecialNotes}>{order.specialNotes}</p>
-            <ul className={styles.orderItems}>
-                {order.orderItems.split(",").map(
-                    (id, index) => {
-                        const item = pricesList.find((item) => item.id === parseInt(id));
-                        return <li key={index}>{item.type} - {item.size} - රු. {item.price}</li>
-                    }
-                )}
-            </ul>
-
-            <p className={styles.orderTotal}>මුළු මුදල: රු {getTotal(order.orderItems)}</p>
-            <br/>
-
-            {
-                order.place === PLACES.frontGate &&
-                (
-                    <div className={`${styles.placeContainer} ${styles.frontGate}`}>
-                        <p className={styles.orderPlace}>{order.place}</p>
-                    </div>
-                )
-            }
-            {
-                order.place === PLACES.backGate && (
-                    <div className={`${styles.placeContainer} ${styles.backGate}`}>
-                        <p className={styles.orderPlace}>{order.place}</p>
-                    </div>
-                )
-            }
-            {
-                order.place === PLACES.boysHostal01 && (
-                    <div className={`${styles.placeContainer} ${styles.boysHostal01}`}>
-                        <p className={styles.orderPlace}>{order.place}</p>
-                    </div>
-                )
-            }
-
-            {
-                order.place === PLACES.boysHostal02 && (
-                    <div className={`${styles.placeContainer} ${styles.boysHostal02}`}>
-                        <p className={styles.orderPlace}>{order.place}</p>
-                    </div>
-                )
-            }
-
-            {
-                order.place === PLACES.boardingPlace && order.mapUrl.length !== 0 && (
-                    <div className={styles.showMapButtonContainer}>
-                        <div className={styles.button}>
-                            <a
-                                className={`${styles.button} ${styles.mapButton}`}
-                                href={order.mapUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Open Google Map
-                            </a>
-                        </div>
-                    </div>
-                )
-            }
-            <br/>
-
-
-            {
-                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.place === PLACES.boardingPlace && pathname === '/orders' && (
-                    <div className={styles.formGroup}>
-                        <label className={styles.label} htmlFor="mapUrl">Map Url:</label>
-                        <div className={styles.inputContainer}>
-                            <input className={styles.input} type="text" id="mapUrl" value={mapUrl}
-                                   onChange={(e) => setMapUrl(e.target.value)} required/>
-                            <button className={`${styles.button} ${styles.update}`} onClick={handleUpdate}>Update</button>
-                        </div>
-                    </div>
-                )
-            }
-            {
-                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status === STATUS.pending && pathname === '/orders' && (
-                    <div className={styles.actionButtons}>
-                        <button className={`${styles.button} ${styles.accept}`} onClick={handleAccept}>
-                            ACCEPT
-                        </button>
-                        <button className={`${styles.button} ${styles.reject}`} onClick={handleReject}>
-                            REJECT
-                        </button>
-                    </div>
-                )
-            }
-
-            {
-                company_emails.includes(user.email) && order.status !== STATUS.delivered && (
-                    <div className={styles.actionButtons}>
-                        <button className={`${styles.button} ${styles.deliver}`} onClick={handleDeliver}>
-                            Complete Delivery
-                        </button>
-                    </div>
-                )
-            }
-
-            {
-                user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && order.status === STATUS.accepted && pathname === '/orders' &&(
-                    <div className={styles.actionButtons}>
-                        <button className={`${styles.button} ${styles.reject}`} onClick={handleCancel}>
-                            Cancel
-                        </button>
-                    </div>
-                )
-            }
-
-
+      <div>
+        {order.itemList.map((item, index) => {
+          return (
+            <div key={index} className={'flex justify-start gap-5 items-start'}>
+              <div>
+                {index + 1}) {item.type} - {item.size}
+              </div>
+              <div>Rs.{item.price}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div className={'text-xl font-bold flex justify-end items-start mt-3'}>
+        මුළු මුදල = Rs.{calculateTotal(order.itemList)}
+      </div>
+      {(order.specialNotes !== '' || !order.addGravy) && (
+        <div className={'bg-pink-400 p-2 text-xl font-bold rounded-lg'}>
+          {order.specialNotes}
+          <br />
+          {!order.addGravy && <p>{GRAVYNOTE}</p>}
         </div>
-    );
-}
+      )}
+
+      {pathname !== DELIVERYORDER && (
+        <>
+          {user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
+            order.status === STATUS.pending && (
+              <div className={'flex justify-end items-start gap-1 mt-5'}>
+                <button
+                  onClick={async () => {
+                    await handleAccept(order);
+                  }}
+                  className={'w-36 p-2 bg-green-500 text-white rounded-lg text-md'}
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={async () => {
+                    await handleReject(order);
+                  }}
+                  className={'w-36 p-2 bg-red-500 text-white rounded-lg text-md'}
+                >
+                  Reject
+                </button>
+              </div>
+            )}
+        </>
+      )}
+
+      {order.status === STATUS.accepted && (
+        <>
+          {company_emails.includes(user.email) && (
+            <div className={'flex justify-end items-start gap-1 mt-5'}>
+              <button
+                onClick={async () => {
+                  await handleDeliver(order);
+                }}
+                className={'w-40 p-2 bg-gray-700 text-yellow-400 rounded-lg text-md'}
+              >
+                Complete Delivery
+              </button>
+            </div>
+          )}
+          {pathname !== DELIVERYORDER && (
+            <>
+              {user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+                <div className={'flex justify-end items-start gap-1 mt-3'}>
+                  <button
+                    onClick={async () => {
+                      await handleCancel(order);
+                    }}
+                    className={'w-36 p-2 bg-red-500 text-white rounded-lg text-md'}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
 
 export default OrderCard;

@@ -1,159 +1,158 @@
-"use client"
-import styles from './page.module.css'
-import {useEffect, useState} from "react";
-import {UserAuth} from "@/app/context/AuthContext";
-import Spinner from "@/components/Spinner/Spinner";
-import {db} from '../firebase'
-import {collection, getDocs, onSnapshot, or,and, query, where} from "firebase/firestore";
-import {format} from "date-fns";
-import {usePathname, useRouter} from 'next/navigation'
-import {company_emails, STATUS} from "@/utils/constants";
-import OrderCard from "@/components/OrderCard/OrderCard";
-
+'use client';
+import { UserAuth } from '@/app/context/AuthContext';
+import { useEffect, useState } from 'react';
+import { fetchDeliveryOrder, fetchOrders, handleDeliveryOrder } from '@/utils/firebaseFunctions';
+import DeliveryOrderCard from '@/components/DeliveryOrderCard/DeliveryOrderCard';
+import { toast } from 'sonner';
+import Spinner from '@/components/Spinner/Spinner';
+import { company_emails, STATUS } from '@/utils/constants';
+import OrderCard from '@/components/OrderCard/OrderCard';
+import { useRouter } from 'next/navigation';
+import { HOME } from '@/utils/routes';
 
 const EditRanks = () => {
-    const {user} = UserAuth();
-    const [orders, setOrders] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [customer, setCustomer] = useState(false);
-    const router = useRouter()
-    const pathname = usePathname();
-    const [index, setIndex] = useState(0);
+  const { user } = UserAuth();
+  const router = useRouter();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [deliveryList, setDeliveryList] = useState([]);
+  const [updating, setUpdating] = useState(false);
 
-
-    const handleNext = ()=>{
-        if(index<orders.length-1){
-            setIndex(index+1);
-        }
+  const finishOrdering = () => {
+    if (orders.length === 0) {
+      setUpdating(true);
+      handleDeliveryOrder(deliveryList)
+        .then(() => {
+          toast.success('Delivery Order Updated Successfully');
+        })
+        .catch((e) => {
+          console.error(e);
+          toast.error('Delivery Order Updating Failed');
+        })
+        .finally(() => {
+          setUpdating(false);
+        });
+    } else {
+      toast.info('Please Add all orders to Delivery order');
     }
+  };
 
-    const handlePrevious = () =>{
-        if(index>=1){
-            setIndex(index-1);
-        }
+  const handleAdd = (order) => {
+    const temp = orders.filter((ord) => {
+      return ord !== order;
+    });
+    setOrders([...temp]);
+    setDeliveryList([...deliveryList, order]);
+  };
+
+  const handleRemove = (order) => {
+    const temp = deliveryList.filter((ord) => {
+      return ord !== order;
+    });
+    setDeliveryList([...temp]);
+    setOrders([...orders, order]);
+  };
+
+  useEffect(() => {
+    if (user) {
+      if (!company_emails.includes(user.email)) {
+        router.push(HOME);
+      }
+      setLoading(true);
+      let tempOrder = [];
+      fetchOrders(user)
+        .then((orders) => {
+          tempOrder = orders.filter((order) => {
+            return order.status === STATUS.pending || order.status === STATUS.accepted;
+          });
+          setOrders(tempOrder);
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+      setLoading(true);
+      fetchDeliveryOrder()
+        .then((deliverOrders) => {
+          console.log(deliverOrders[0].order.length);
+          console.log(orders.length);
+          if (deliverOrders[0].order.length === tempOrder.length) {
+            setDeliveryList(deliverOrders[0].order);
+            setOrders([]);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          toast.error('Delivery Order Fetching Failed');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
+  }, [user]);
 
-
-    useEffect(() => {
-        const date = format(new Date, 'yyyy-MM-dd')
-
-        const fetch = async (q, dateOrderQuery) => {
-            const temp = [];
-
-            const orderSnapshot = await getDocs(dateOrderQuery);
-            let deliveryOrder = [];
-            orderSnapshot.forEach(
-                (doc) => {
-                    deliveryOrder = doc.data().order.split(',').map(i => (parseInt(i)))
-                }
-            )
-            console.log(deliveryOrder);
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                temp.push(
-                    {...doc.data(), id: doc.id}
-                );
-            });
-            let tempOrders = [];
-            deliveryOrder.forEach(
-                (id) => {
-                    temp.forEach(
-                        (order) => {
-                            if (order.rank === id) {
-                                tempOrders.push(order);
-                            }
-                        }
-                    )
-                }
-            )
-            setOrders(tempOrders);
-        }
-
-        if (user && company_emails.includes(user.email)) {
-
-            setIsLoading(true);
-
-
-            const q = query(collection(db, "orders"),
-                and(where("orderDate", "==", date),
-                or(where("status", "==", STATUS.accepted), where('status', "==", STATUS.pending)))
-            );
-            const dateOrderQuery = query(collection(db, "orderWithDate"), where("date", "==", date),);
-
-
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    fetch(q, dateOrderQuery);
-                });
-                setIsLoading(false);
-            });
-            const unsubscribe2 = onSnapshot(dateOrderQuery,
-                (snapshot) => {
-                    snapshot.docChanges().forEach((change) => {
-                        fetch(q, dateOrderQuery);
-                    });
-                    setIsLoading(false);
-                }
-            )
-
-            return () => {
-                unsubscribe();
-            };
-
-        } else {
-            if (typeof window !== undefined) {
-                if (!localStorage.getItem('user')) {
-                    router.push('/')
-                }
-            }
-        }
-    }, [user]);
-
-
-    if (!user) {
-        return <></>
-    }
-
-    // console.log(orders)
-
-
-    return (
+  return (
+    <div>
+      {user && user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
         <>
-
-            <div>
-                {
-                    isLoading && <div className={styles.heading}><Spinner/></div>
-                }
-                {
-                    error && <div className={styles.errorMsg}>{error}</div>
-                }
+          {loading ? (
+            <div className={'flex w-full h-[80vh] justify-center items-center'}>
+              <Spinner />
             </div>
-
-            {
-                !company_emails.includes(user.email) &&
-                (<h2 className={styles.loadingMsg}>{format(new Date(), 'yyyy-MM-dd')} සදහා ඇනවුම්:</h2>)
-            }
-
-            <div>
-                {
-                    orders[index] && (
-                        <><OrderCard order={orders[index]} id={index} user={user}/></>
-                    )
-                }
-                <div className={styles.actionButtons}>
-                    <button className={`${styles.button} ${styles.accept}`} onClick={handlePrevious}>
-                        Previous
-                    </button>
-                    <button className={`${styles.button} ${styles.reject}`} onClick={handleNext}>
-                        Next
-                    </button>
+          ) : (
+            <>
+              <div className={'sm:grid sm:grid-cols-2'}>
+                <div className={'bg-green-500 p-2'}>
+                  <p className={'text-xl'}>Current order:</p>
+                  {orders.map((order, index) => {
+                    return (
+                      <div key={index} className={''}>
+                        <DeliveryOrderCard delivery={false} handle={handleAdd} order={order} />
+                      </div>
+                    );
+                  })}
                 </div>
-            </div>
+                <div className={'bg-orange-600 p-2'}>
+                  <p className={'text-xl'}>Delivery order:</p>
 
-
+                  {deliveryList.map((order, index) => {
+                    return (
+                      <div key={index} className={''}>
+                        <DeliveryOrderCard delivery={true} handle={handleRemove} order={order} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className={'flex justify-end items-center'}>
+                {!updating ? (
+                  <button
+                    onClick={finishOrdering}
+                    className={'bg-green-500 m-5 rounded-lg text-xl p-2'}
+                  >
+                    Finish Ordering
+                  </button>
+                ) : (
+                  <div className={'m-5'}>
+                    <Spinner />
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </>
-    );
-}
+      )}
+      {user && (
+        <>
+          {deliveryList.map((order, index) => {
+            return <OrderCard key={index} order={order} user={user} />;
+          })}
+        </>
+      )}
+    </div>
+  );
+};
 
 export default EditRanks;
