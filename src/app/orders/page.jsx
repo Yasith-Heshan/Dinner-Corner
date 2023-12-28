@@ -4,13 +4,12 @@ import { useEffect, useState } from 'react';
 import Categorise from '@/components/Categorise/Categorise';
 import { UserAuth } from '@/app/context/AuthContext';
 import Spinner from '@/components/Spinner/Spinner';
-import { onSnapshot } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Locations from '@/components/Locations/Locations';
 import { company_emails, STATUS } from '@/utils/constants';
-import { fetchOrders, getQuery } from '@/utils/firebaseFunctions';
-import { toast } from 'sonner';
-import { ORDER_FETCHING_ERROR } from '@/utils/errorMessages';
+import {fetchOrders, fetchRealTimeData, getQuery} from '@/utils/firebaseFunctions';
+import {toast} from "sonner";
+import {ORDER_FETCHING_ERROR} from "@/utils/errorMessages";
 
 const AcceptedOrders = () => {
   const { user } = UserAuth();
@@ -18,28 +17,29 @@ const AcceptedOrders = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
+  const callBackHandle=()=>{
     setIsLoading(true);
+    fetchOrders(user).then(
+        (orders)=>{
+          setOrders(orders);
+        }
+    ).catch(
+        (e)=>{
+          console.error(e);
+          toast.error(ORDER_FETCHING_ERROR);
+        }
+    ).finally(
+        ()=>{setIsLoading(false);
+  }
+    )
+  }
+
+  useEffect(() => {
 
     if (user) {
-      const q = getQuery(user);
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        snapshot.docChanges().forEach(() => {
-          fetchOrders(user)
-            .then((orders) => {
-              setOrders(orders);
-            })
-            .catch((e) => {
-              console.error(e);
-              toast.error(ORDER_FETCHING_ERROR);
-            });
-        });
-        setIsLoading(false);
-      });
+      const q=getQuery(user);
+      fetchRealTimeData(q,callBackHandle);
 
-      return () => {
-        unsubscribe();
-      };
     } else {
       if (typeof window !== undefined) {
         if (!localStorage.getItem('user')) {
@@ -66,44 +66,32 @@ const AcceptedOrders = () => {
           <Spinner />
         </div>
       ) : (
-        <>
-          {orders.length !== 0 ? (
-            <div>
-              {user && company_emails.includes(user.email) && <Categorise orders={orders} />}
-              <div>
-                {orders &&
-                  orders
-                    .filter((order) => {
-                      return !(
-                        order.status === STATUS.rejected || order.status === STATUS.canceled
-                      );
-                    })
-                    .map((order, index) => {
-                      if (company_emails.includes(user.email)) {
-                        if (
-                          !(order.status === STATUS.rejected || order.status === STATUS.canceled)
-                        ) {
-                          const orderJson = JSON.parse(JSON.stringify(order));
-                          return <OrderCard key={index} order={orderJson} user={user} />;
-                        }
-                      } else {
-                        const orderJson = JSON.parse(JSON.stringify(order));
-                        return <OrderCard key={index} order={orderJson} user={user} />;
-                      }
-                    })}
-              </div>
-              {user && company_emails.includes(user.email) && <Locations orders={orders} />}
-            </div>
-          ) : (
-            <div className={'text-xl text-center'}>
-              {!company_emails.includes(user.email) ? (
-                <>You haven&apos;t ordered any food item</>
-              ) : (
-                <>Empty orders list</>
-              )}
-            </div>
+        <div>
+          {user && user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+            <Categorise orders={orders} />
           )}
-        </>
+          <div>
+            {orders &&
+              orders
+                .filter((order) => {
+                  return !(order.status === STATUS.rejected || order.status === STATUS.canceled);
+                })
+                .map((order, index) => {
+                  if (company_emails.includes(user.email)) {
+                    if (!(order.status === STATUS.rejected || order.status === STATUS.canceled)) {
+                      const orderJson = JSON.parse(JSON.stringify(order));
+                      return <OrderCard key={index} order={orderJson} user={user} />;
+                    }
+                  } else {
+                    const orderJson = JSON.parse(JSON.stringify(order));
+                    return <OrderCard key={index} order={orderJson} user={user} />;
+                  }
+                })}
+          </div>
+          {user && user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+            <Locations orders={orders} />
+          )}
+        </div>
       )}
     </>
   );
