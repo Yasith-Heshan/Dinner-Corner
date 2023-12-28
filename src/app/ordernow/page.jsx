@@ -1,15 +1,14 @@
 'use client';
 import './style.css';
-import {useEffect, useState} from 'react';
-import {CLOSINGNOTE, DEADLINE, MAXIMUMORDERCOUNT} from '@/utils/constants';
-import {format, isAfter, parse} from 'date-fns';
-import {UserAuth} from '@/app/context/AuthContext';
-import {fetchShopStatus, getOrderCount, saveOrder} from '@/utils/firebaseFunctions';
-import {useRouter} from 'next/navigation';
-import {ORDERS} from '@/utils/routes';
+import { useEffect, useState } from 'react';
+import { CLOSINGNOTE, DEADLINE, MAXIMUMORDERCOUNT } from '@/utils/constants';
+import { format, isAfter, parse } from 'date-fns';
+import { UserAuth } from '@/app/context/AuthContext';
+import { fetchShopStatus, getOrderCount, saveOrder } from '@/utils/firebaseFunctions';
+import { useRouter } from 'next/navigation';
+import { ORDERS } from '@/utils/routes';
 import Spinner from '@/components/Spinner/Spinner';
-import OrderForm from "@/components/OrderForm/OrderForm";
-
+import OrderForm from '@/components/OrderForm/OrderForm';
 
 const OrderNow = () => {
   const { user } = UserAuth();
@@ -19,8 +18,6 @@ const OrderNow = () => {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [shopOpen, setShopOpen] = useState(true);
-
-
 
   useEffect(() => {
     setLoading(true);
@@ -35,10 +32,6 @@ const OrderNow = () => {
         setLoading(false);
       });
   }, []);
-
-
-
-
 
   const placeOrder = async (data) => {
     if (confirm('Are you sure?')) {
@@ -81,7 +74,6 @@ const OrderNow = () => {
     }
   };
 
-
   return (
     <>
       {loading ? (
@@ -96,7 +88,13 @@ const OrderNow = () => {
                 <div
                   className={"w-full bg-[url('/ord.jpg')] flex justify-center items-center py-20"}
                 >
-                  <OrderForm lateOrder={lateOrder} limitExceeded={limitExceeded} submitting={submitting} submitHandler={placeOrder} user={user}/>
+                  <OrderForm
+                    lateOrder={lateOrder}
+                    limitExceeded={limitExceeded}
+                    submitting={submitting}
+                    submitHandler={placeOrder}
+                    user={user}
+                  />
                 </div>
               ) : (
                 <div className={'flex justify-center items-center  h-[80vh]'}>

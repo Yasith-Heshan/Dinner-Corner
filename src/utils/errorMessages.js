@@ -5,4 +5,4 @@ export const ORDER_LIMIT_EXCEEDED_ERROR = (date) => {
 };
 export const LATE_ORDER_ERROR = `Sorry, orders received after ${DEADLINE} will not be accepted due to timely delivery.`;
 
-export const ORDER_FETCHING_ERROR = 'ඇනවුම් ලබා ගැනීම අසාර්තකයි. යම් වරදක් සිදුවී ඇත.'
+export const ORDER_FETCHING_ERROR = 'ඇනවුම් ලබා ගැනීම අසාර්තකයි. යම් වරදක් සිදුවී ඇත.';
