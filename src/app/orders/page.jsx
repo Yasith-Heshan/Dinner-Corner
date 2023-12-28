@@ -95,10 +95,21 @@ const AcceptedOrders = () => {
                                     <Locations orders={orders}/>
                                 )}
                             </div>
-                        ):(
-                        <div className={'text-xl text-center'}>
-                            You haven&apos;t ordered any food item
-                        </div>
+                        ) : (
+                            <div className={'text-xl text-center'}>
+                                {
+                                    !company_emails.includes(user.email) ?
+                                        (
+                                            <>
+                                                You haven&apos;t ordered any food item
+                                            </>
+                                        ) :(
+                                            <>
+                                                Empty orders list
+                                            </>
+                                        )
+                                }
+                            </div>
                         )
                     }
                 </>
