@@ -143,16 +143,21 @@ const OrderCard = ({ order, user }) => {
           {pathname !== DELIVERYORDER && (
             <>
               {user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
-                <div className={'flex justify-end items-start gap-1 mt-3'}>
-                  <button
-                    onClick={async () => {
-                      await handleCancel(order);
-                    }}
-                    className={'w-36 p-2 bg-red-500 text-white rounded-lg text-md'}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                <>
+                  <div className={'flex justify-end items-start gap-1 mt-3'}>
+                    <button
+                      onClick={async () => {
+                        await handleCancel(order);
+                      }}
+                      className={'w-40 p-2 bg-red-500 text-white rounded-lg text-md'}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  {/*<div className={'flex justify-end items-start gap-1 mt-3'}>*/}
+                  {/*    <button type="button" data-modal-target="orderFormModal" data-modal-toggle="orderFormModal" className={'p-2 bg-blue-700 rounded-lg text-white w-40'}>Edit</button>*/}
+                  {/*</div>*/}
+                </>
               )}
             </>
           )}

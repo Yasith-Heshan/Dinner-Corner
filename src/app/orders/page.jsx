@@ -7,9 +7,9 @@ import Spinner from '@/components/Spinner/Spinner';
 import { useRouter } from 'next/navigation';
 import Locations from '@/components/Locations/Locations';
 import { company_emails, STATUS } from '@/utils/constants';
-import {fetchOrders, fetchRealTimeData, getQuery} from '@/utils/firebaseFunctions';
-import {toast} from "sonner";
-import {ORDER_FETCHING_ERROR} from "@/utils/errorMessages";
+import { fetchOrders, fetchRealTimeData, getQuery } from '@/utils/firebaseFunctions';
+import { toast } from 'sonner';
+import { ORDER_FETCHING_ERROR } from '@/utils/errorMessages';
 
 const AcceptedOrders = () => {
   const { user } = UserAuth();
@@ -17,29 +17,25 @@ const AcceptedOrders = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const callBackHandle=()=>{
+  const callBackHandle = () => {
     setIsLoading(true);
-    fetchOrders(user).then(
-        (orders)=>{
-          setOrders(orders);
-        }
-    ).catch(
-        (e)=>{
-          console.error(e);
-          toast.error(ORDER_FETCHING_ERROR);
-        }
-    ).finally(
-        ()=>{setIsLoading(false);
-  }
-    )
-  }
+    fetchOrders(user)
+      .then((orders) => {
+        setOrders(orders);
+      })
+      .catch((e) => {
+        console.error(e);
+        toast.error(ORDER_FETCHING_ERROR);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   useEffect(() => {
-
     if (user) {
-      const q=getQuery(user);
-      fetchRealTimeData(q,callBackHandle);
-
+      const q = getQuery(user);
+      fetchRealTimeData(q, callBackHandle);
     } else {
       if (typeof window !== undefined) {
         if (!localStorage.getItem('user')) {

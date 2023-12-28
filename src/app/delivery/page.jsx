@@ -1,14 +1,20 @@
 'use client';
-import { UserAuth } from '@/app/context/AuthContext';
-import { useEffect, useState } from 'react';
-import { fetchDeliveryOrder, fetchOrders, handleDeliveryOrder } from '@/utils/firebaseFunctions';
+import {UserAuth} from '@/app/context/AuthContext';
+import {useEffect, useState} from 'react';
+import {
+  fetchDeliveryOrder,
+  fetchOrders,
+  fetchRealTimeData,
+  getDeliveryOrderQuery,
+  handleDeliveryOrder,
+} from '@/utils/firebaseFunctions';
 import DeliveryOrderCard from '@/components/DeliveryOrderCard/DeliveryOrderCard';
-import { toast } from 'sonner';
+import {toast} from 'sonner';
 import Spinner from '@/components/Spinner/Spinner';
-import { company_emails, STATUS } from '@/utils/constants';
+import {company_emails} from '@/utils/constants';
 import OrderCard from '@/components/OrderCard/OrderCard';
-import { useRouter } from 'next/navigation';
-import { HOME } from '@/utils/routes';
+import {useRouter} from 'next/navigation';
+import {HOME} from '@/utils/routes';
 
 const EditRanks = () => {
   const { user } = UserAuth();
@@ -16,6 +22,7 @@ const EditRanks = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deliveryList, setDeliveryList] = useState([]);
+  const [fetchedDeliveryList, setFetchedDeliveryList] = useState([]);
   const [updating, setUpdating] = useState(false);
 
   const finishOrdering = () => {
@@ -53,19 +60,29 @@ const EditRanks = () => {
     setOrders([...orders, order]);
   };
 
+  const deliveryOrderFetchHandler = () => {
+    fetchDeliveryOrder()
+      .then((deliverOrders) => {
+        setFetchedDeliveryList(deliverOrders[0].order);
+      })
+      .catch((e) => {
+        console.error(e);
+        toast.error('Delivery Order Fetching Failed');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (user) {
       if (!company_emails.includes(user.email)) {
         router.push(HOME);
       }
       setLoading(true);
-      let tempOrder = [];
       fetchOrders(user)
         .then((orders) => {
-          tempOrder = orders.filter((order) => {
-            return order.status === STATUS.pending || order.status === STATUS.accepted;
-          });
-          setOrders(tempOrder);
+          setOrders(orders);
         })
         .catch((e) => {
           console.error(e);
@@ -74,24 +91,11 @@ const EditRanks = () => {
           setLoading(false);
         });
       setLoading(true);
-      fetchDeliveryOrder()
-        .then((deliverOrders) => {
-          console.log(deliverOrders[0].order.length);
-          console.log(orders.length);
-          if (deliverOrders[0].order.length === tempOrder.length) {
-            setDeliveryList(deliverOrders[0].order);
-            setOrders([]);
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-          toast.error('Delivery Order Fetching Failed');
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      fetchRealTimeData(getDeliveryOrderQuery(), deliveryOrderFetchHandler);
     }
   }, [user]);
+
+  console.log(fetchedDeliveryList);
 
   return (
     <div>
@@ -146,7 +150,7 @@ const EditRanks = () => {
       )}
       {user && (
         <>
-          {deliveryList.map((order, index) => {
+          {fetchedDeliveryList.map((order, index) => {
             return <OrderCard key={index} order={order} user={user} />;
           })}
         </>
