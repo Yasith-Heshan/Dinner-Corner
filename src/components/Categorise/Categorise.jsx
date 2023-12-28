@@ -5,10 +5,12 @@ const Categorise = ({ orders }) => {
   const partner1 = {
     small: 0,
     full: 0,
+    price:0,
   };
   const partner2 = {
     small: 0,
     full: 0,
+    price:0,
   };
   const foodCounts = {};
   pricesList.forEach((item) => {
@@ -27,12 +29,14 @@ const Categorise = ({ orders }) => {
           } else {
             partner2.small += 1;
           }
+            partner2.price += item.price;
         } else {
           if (item.id % 2 === 0) {
             partner1.full += 1;
           } else {
             partner1.small += 1;
           }
+          partner1.price += item.price;
         }
       }
     });
@@ -101,6 +105,14 @@ const Categorise = ({ orders }) => {
                   <td className={'px-6 py-3'}>Full Rice</td>
                   <td className={'px-6 py-3'}>{partner1.full}</td>
                 </tr>
+                <tr
+                    className={
+                      'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
+                    }
+                >
+                  <td className={'px-6 py-3'}>ආදායම</td>
+                  <td className={'px-6 py-3'}>{partner1.price}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -128,6 +140,14 @@ const Categorise = ({ orders }) => {
                 >
                   <td className={'px-6 py-3'}>Full Rice</td>
                   <td className={'px-6 py-3'}>{partner2.full}</td>
+                </tr>
+                <tr
+                    className={
+                      'odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'
+                    }
+                >
+                  <td className={'px-6 py-3'}>ආදායම</td>
+                  <td className={'px-6 py-3'}>{partner2.price}</td>
                 </tr>
               </tbody>
             </table>
