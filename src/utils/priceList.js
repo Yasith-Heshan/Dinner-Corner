@@ -4,11 +4,11 @@ const size = {
 };
 
 const mealType = {
-  Veg: 'එළවළු කෑම',
-  Egg: 'බිත්තර කෑම',
-  Omelet: 'ඔම්ලට්',
-  Fish: 'මාළු කෑම',
-  Chicken: 'කුකුල් මස් කෑම',
+  Veg: 'එළවළු කෑම (Vegi Rice and Curry)',
+  Egg: 'බිත්තර කෑම (Egg Rice and Curry)',
+  Omelet: 'ඔම්ලට් (Omelet Rice and Curry)',
+  Fish: 'මාළු කෑම (Fish Rice and Curry)',
+  Chicken: 'කුකුල් මස් කෑම (Chicken Rice and Curry)',
   ChickenFriedRice: 'Chicken Fried Rice',
   YellowRice: 'කහබත්(Chicken)',
   EggKottu: 'Egg Kottu',
@@ -20,7 +20,7 @@ export const pricesList = [
     type: mealType.Veg,
     size: size.Small,
     enoughFor: 1,
-    price: 150,
+    price: 200,
   },
 
   {
@@ -28,7 +28,7 @@ export const pricesList = [
     type: mealType.Veg,
     size: size.Full,
     enoughFor: 2,
-    price: 230,
+    price: 260,
   },
 
   {
@@ -36,7 +36,7 @@ export const pricesList = [
     type: mealType.Egg,
     size: size.Small,
     enoughFor: 1,
-    price: 250,
+    price: 280,
   },
 
   {
@@ -44,7 +44,7 @@ export const pricesList = [
     type: mealType.Egg,
     size: size.Full,
     enoughFor: 2,
-    price: 300,
+    price: 340,
   },
 
   {
@@ -52,7 +52,7 @@ export const pricesList = [
     type: mealType.Omelet,
     size: size.Small,
     enoughFor: 1,
-    price: 260,
+    price: 300,
   },
 
   {
@@ -60,7 +60,7 @@ export const pricesList = [
     type: mealType.Omelet,
     size: size.Full,
     enoughFor: 2,
-    price: 320,
+    price: 360,
   },
 
   {
@@ -68,7 +68,7 @@ export const pricesList = [
     type: mealType.Fish,
     size: size.Small,
     enoughFor: 1,
-    price: 260,
+    price: 320,
   },
 
   {
@@ -76,7 +76,7 @@ export const pricesList = [
     type: mealType.Fish,
     size: size.Full,
     enoughFor: 2,
-    price: 320,
+    price: 380,
   },
 
   {
@@ -84,7 +84,7 @@ export const pricesList = [
     type: mealType.Chicken,
     size: size.Small,
     enoughFor: 1,
-    price: 280,
+    price: 320,
   },
 
   {
@@ -92,7 +92,7 @@ export const pricesList = [
     type: mealType.Chicken,
     size: size.Full,
     enoughFor: 2,
-    price: 350,
+    price: 380,
   },
 
   {
@@ -100,55 +100,55 @@ export const pricesList = [
     type: mealType.ChickenFriedRice,
     size: size.Small,
     enoughFor: 1,
-    price: 280,
+    price: 400,
   },
   {
     id: 12,
     type: mealType.ChickenFriedRice,
     size: size.Full,
     enoughFor: 2,
-    price: 350,
+    price: 460,
   },
   {
     id: 13,
     type: mealType.YellowRice,
     size: size.Small,
     enoughFor: 1,
-    price: 280,
+    price: 340,
   },
   {
     id: 14,
     type: mealType.YellowRice,
     size: size.Full,
     enoughFor: 2,
-    price: 350,
-  },
-  {
-    id: 15,
-    type: mealType.EggKottu,
-    size: size.Small,
-    enoughFor: 1,
-    price: 350,
-  },
-  {
-    id: 16,
-    type: mealType.EggKottu,
-    size: size.Full,
-    enoughFor: 2,
     price: 400,
   },
-  {
-    id: 17,
-    type: mealType.ChickenKottu,
-    size: size.Small,
-    enoughFor: 1,
-    price: 450,
-  },
-  {
-    id: 18,
-    type: mealType.ChickenKottu,
-    size: size.Full,
-    enoughFor: 2,
-    price: 500,
-  },
+  // {
+  //   id: 15,
+  //   type: mealType.EggKottu,
+  //   size: size.Small,
+  //   enoughFor: 1,
+  //   price: 350,
+  // },
+  // {
+  //   id: 16,
+  //   type: mealType.EggKottu,
+  //   size: size.Full,
+  //   enoughFor: 2,
+  //   price: 400,
+  // },
+  // {
+  //   id: 17,
+  //   type: mealType.ChickenKottu,
+  //   size: size.Small,
+  //   enoughFor: 1,
+  //   price: 450,
+  // },
+  // {
+  //   id: 18,
+  //   type: mealType.ChickenKottu,
+  //   size: size.Full,
+  //   enoughFor: 2,
+  //   price: 500,
+  // },
 ];
