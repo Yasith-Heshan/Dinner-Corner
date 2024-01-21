@@ -10,7 +10,7 @@ const mealType = {
   Fish: 'මාළු කෑම (Fish Rice and Curry)',
   Chicken: 'කුකුල් මස් කෑම (Chicken Rice and Curry)',
   ChickenFriedRice: 'Chicken Fried Rice',
-  YellowRice: 'කහබත්(Chicken)',
+  YellowRice: 'Yellow Rice(Chicken)',
   EggKottu: 'Egg Kottu',
   ChickenKottu: 'Chicken Kottu',
 };

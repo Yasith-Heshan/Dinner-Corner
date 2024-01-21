@@ -3,7 +3,7 @@ import './style.css';
 import { useEffect, useState } from 'react';
 import { company_emails, GRAVYNOTE, STATUS } from '@/utils/constants';
 import { handleAccept, handleCancel, handleDeliver, handleReject } from '@/utils/firebaseFunctions';
-import { getLocationColor } from '@/utils/supportFuncitons';
+import {calculateTotal, getLocationColor} from '@/utils/supportFuncitons';
 import { usePathname } from 'next/navigation';
 import { DELIVERYORDER } from '@/utils/routes';
 
@@ -30,13 +30,7 @@ const OrderCard = ({ order, user }) => {
     }
   }, [order]);
 
-  const calculateTotal = (itemList) => {
-    let total = 0;
-    itemList.forEach((item) => {
-      total += item.price;
-    });
-    return total;
-  };
+
 
   return (
     <div

@@ -28,3 +28,11 @@ export const getItem = (id) => {
   });
   return temp;
 };
+
+export const calculateTotal = (itemList) => {
+  let total = 0;
+  itemList.forEach((item) => {
+    total += item.price;
+  });
+  return total;
+};
