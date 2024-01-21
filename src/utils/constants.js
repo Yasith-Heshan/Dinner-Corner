@@ -23,7 +23,7 @@ export const company_emails = [
 ];
 
 export const DEADLINE = '16:00';
-export const MAXIMUMORDERCOUNT = 4;
+export const MAXIMUMORDERCOUNT = 25;
 
 export const PARTNERLIST = [7, 8, 11, 12, 13, 14];
 export const KOTTULIST = [15, 16, 17, 18];
