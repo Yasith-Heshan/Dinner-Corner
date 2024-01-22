@@ -63,7 +63,7 @@ const AcceptedOrders = () => {
         </div>
       ) : (
         <div>
-          {user && user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+          {user && company_emails.includes(user.email) && (
             <Categorise orders={orders} />
           )}
           <div>
