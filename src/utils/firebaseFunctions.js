@@ -36,6 +36,24 @@ export const saveOrder = async (orderDetails) => {
   });
 };
 
+export const editOrder = async (id,orderDetails)=>{
+  const docRef = doc(db, 'orders', id);
+  await updateDoc(
+      docRef,{
+        name: orderDetails.name,
+        email: orderDetails.email,
+        phoneNumber: orderDetails.phoneNo,
+        itemList: orderDetails.itemList,
+        orderDate: orderDetails.date,
+        createdAt: serverTimestamp(),
+        mapUrl: orderDetails.mapUrl,
+        location: orderDetails.location,
+        specialNotes: orderDetails.specialNotes,
+        addGravy: orderDetails.addGravy,
+      }
+  )
+}
+
 export const getOrderCount = async (date) => {
   const q = query(collection(db, 'orders'), where('orderDate', '==', date));
   const querySnapshot = await getCountFromServer(q);
@@ -72,6 +90,12 @@ export const fetchOrders = async (user) => {
   temp.sort((a, b) => a.createdAt - b.createdAt);
   return temp;
 };
+
+export const fetchOrder = async (id)=>{
+  const docRef = doc(db, 'orders', id);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data();
+}
 
 export const handleAccept = async (order) => {
   const docRef = doc(db, 'orders', order.id);

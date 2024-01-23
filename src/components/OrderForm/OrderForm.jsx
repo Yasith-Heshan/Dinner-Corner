@@ -122,11 +122,14 @@ const OrderForm = ({submitHandler, limitExceeded, lateOrder, submitting, user}) 
                 {ORDER_LIMIT_EXCEEDED_ERROR(new Date(getValues('date')).toLocaleDateString())}
             </div>)}
 
-            {lateOrder && (<div
-                className={'w-full h-10 rounded-lg mb-5 text-red-500 font-bold text-center bg-red-50 p-1 flex justify-center items-center'}
-            >
-                {LATE_ORDER_ERROR}
-            </div>)}
+            {lateOrder && (
+                <div
+                    className={'w-full h-10 rounded-lg mb-5 text-red-500 font-bold text-center bg-red-50 p-1 flex justify-center items-center'}
+                >
+                    {LATE_ORDER_ERROR}
+                </div>
+            )
+            }
 
             <div className='mb-5'>
                 <label htmlFor='text' className={errors['name'] ? 'failedLabel' : 'successLabel'}>
