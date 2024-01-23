@@ -22,7 +22,7 @@ export const company_emails = [
   process.env.NEXT_PUBLIC_MANAGER_4_EMAIL,
 ];
 
-export const DEADLINE = '16:00';
+export const DEADLINE = '16:30';
 export const MAXIMUMORDERCOUNT = 25;
 
 export const PARTNERLIST = [7, 8, 11, 12, 13, 14];
