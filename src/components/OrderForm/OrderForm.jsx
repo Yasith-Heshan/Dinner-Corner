@@ -26,7 +26,6 @@ const reducer = (state, action) => {
                 boarding: state.boarding,
             };
         case 'addToCart':
-            console.log(state);
             const temp = [];
             for (let i = 0; i < state.size; i++) {
                 temp.push(state.item);
