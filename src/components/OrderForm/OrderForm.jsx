@@ -26,6 +26,7 @@ const reducer = (state, action) => {
                 boarding: state.boarding,
             };
         case 'addToCart':
+            console.log(state);
             const temp = [];
             for (let i = 0; i < state.size; i++) {
                 temp.push(state.item);
@@ -301,7 +302,7 @@ const OrderForm = ({submitHandler, limitExceeded, lateOrder, submitting, user}) 
                             <option></option>
                             {pricesList.map((item) => {
                                 return (
-                                    <option key={item.id}>
+                                    <option value={item.id} key={item.id}>
                                         {item.type} - {item.size} - Rs.{item.price}
                                     </option>
                                 );
