@@ -321,7 +321,7 @@ const OrderForm = ({submitHandler, limitExceeded, lateOrder, submitting, user}) 
                             {[...Array(21).keys()]
                                 .map((i) => i)
                                 .map((i) => {
-                                    return <option key={i}>{i}</option>;
+                                    return <option value={i} key={i}>{i}</option>;
                                 })}
                         </select>
                     </div>
