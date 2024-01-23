@@ -11,7 +11,6 @@ const OrderCard = ({order, user}) => {
     const [orderStateClass, setOrderStateClass] = useState('pending');
     const pathname = usePathname();
     const router = useRouter();
-    console.log(order);
 
     useEffect(() => {
         switch (order.status) {

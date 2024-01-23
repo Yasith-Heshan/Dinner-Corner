@@ -4,7 +4,6 @@ const Cart = ({itemList,handleRemoveFromCart})=>{
     const handleRemove = (index)=>{
         const copy = itemList;
         copy.splice(index,1);
-        console.log(copy)
         handleRemoveFromCart(itemList.splice(copy));
     }
 
