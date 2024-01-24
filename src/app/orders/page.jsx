@@ -20,8 +20,9 @@ const AcceptedOrders = () => {
   const callBackHandle = () => {
     setIsLoading(true);
     fetchOrders(user)
-      .then((orders) => {
-        setOrders(orders);
+      .then((res) => {
+        console.log(res);
+        setOrders(res);
       })
       .catch((e) => {
         console.error(e);
@@ -63,9 +64,7 @@ const AcceptedOrders = () => {
         </div>
       ) : (
         <div>
-          {user && company_emails.includes(user.email) && (
-            <Categorise orders={orders} />
-          )}
+          {user && company_emails.includes(user.email) && <Categorise orders={orders} />}
           <div>
             {orders &&
               orders
@@ -84,9 +83,7 @@ const AcceptedOrders = () => {
                   }
                 })}
           </div>
-          {user && company_emails.includes(user.email) && (
-            <Locations orders={orders} />
-          )}
+          {user && company_emails.includes(user.email) && <Locations orders={orders} />}
         </div>
       )}
     </>
