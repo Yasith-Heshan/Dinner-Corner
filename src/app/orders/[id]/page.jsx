@@ -48,10 +48,8 @@ const OrderEdit = ({params}) => {
 
     useEffect(() => {
 
-        console.log(params.id);
         fetchOrder(params.id)
             .then((res) => {
-                console.log(res);
                 setOrder(res);
             })
             .catch((error) => {
