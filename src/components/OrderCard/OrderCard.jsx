@@ -96,7 +96,7 @@ const OrderCard = ({order, user}) => {
             )}
 
             {
-                order.location === PLACES.boardingPlace && (
+                order.location === PLACES.boardingPlace && order.mapUrl!=='' && (
                     <div className={'flex justify-center items-center my-5'}>
                         <a className={'w-56 text-center rounded-lg p-2 bg-blue-500 text-white'} href={order.mapUrl}>Open Google Maps</a>
                     </div>
