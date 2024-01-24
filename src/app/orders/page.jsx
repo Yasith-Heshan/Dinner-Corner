@@ -21,7 +21,6 @@ const AcceptedOrders = () => {
     setIsLoading(true);
     fetchOrders(user)
       .then((res) => {
-        console.log(res);
         setOrders(res);
       })
       .catch((e) => {
