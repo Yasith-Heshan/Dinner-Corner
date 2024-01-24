@@ -55,6 +55,7 @@ const OrderEdit = ({ params }) => {
           setOrder(res);
         })
         .catch((error) => {
+          toast.error('Order Fetching error')
           console.error(error);
         });
     };
